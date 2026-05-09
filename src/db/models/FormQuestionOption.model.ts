@@ -1,5 +1,28 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+    Association,
+    BelongsToCreateAssociationMixin,
+    BelongsToGetAssociationMixin,
+    BelongsToSetAssociationMixin,
+    CreationOptional,
+    DataTypes,
+    ForeignKey,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    HasManySetAssociationsMixin,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 
+import CandidateAnswer from './CandidateAnswer.model';
 import FormQuestion from './FormQuestion.model';
 import sequelize from './sequelize';
 
@@ -14,6 +37,31 @@ class FormQuestionOption extends Model<InferAttributes<FormQuestionOption>, Infe
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
+
+    declare question?: NonAttribute<FormQuestion>;
+    declare answers?: NonAttribute<CandidateAnswer[]>;
+
+    // BelongsTo FormQuestion mixins
+    declare getQuestion: BelongsToGetAssociationMixin<FormQuestion>;
+    declare setQuestion: BelongsToSetAssociationMixin<FormQuestion, number>;
+    declare createQuestion: BelongsToCreateAssociationMixin<FormQuestion>;
+
+    // HasMany CandidateAnswer mixins
+    declare getAnswers: HasManyGetAssociationsMixin<CandidateAnswer>;
+    declare countAnswers: HasManyCountAssociationsMixin;
+    declare hasAnswer: HasManyHasAssociationMixin<CandidateAnswer, number>;
+    declare hasAnswers: HasManyHasAssociationsMixin<CandidateAnswer, number>;
+    declare addAnswer: HasManyAddAssociationMixin<CandidateAnswer, number>;
+    declare addAnswers: HasManyAddAssociationsMixin<CandidateAnswer, number>;
+    declare setAnswers: HasManySetAssociationsMixin<CandidateAnswer, number>;
+    declare removeAnswer: HasManyRemoveAssociationMixin<CandidateAnswer, number>;
+    declare removeAnswers: HasManyRemoveAssociationsMixin<CandidateAnswer, number>;
+    declare createAnswer: HasManyCreateAssociationMixin<CandidateAnswer, 'selectedOptionId'>;
+
+    declare static associations: {
+        question: Association<FormQuestionOption, FormQuestion>;
+        answers: Association<FormQuestionOption, CandidateAnswer>;
+    };
 }
 
 FormQuestionOption.init({

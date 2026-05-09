@@ -1,5 +1,24 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+    Association,
+    CreationOptional,
+    DataTypes,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    HasManySetAssociationsMixin,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 
+import CandidateSubmission from './CandidateSubmission.model';
 import sequelize from './sequelize';
 
 class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttributes<Candidate>> {
@@ -10,6 +29,24 @@ class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttribute
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
+
+    declare submissions?: NonAttribute<CandidateSubmission[]>;
+
+    // HasMany CandidateSubmission mixins
+    declare getSubmissions: HasManyGetAssociationsMixin<CandidateSubmission>;
+    declare countSubmissions: HasManyCountAssociationsMixin;
+    declare hasSubmission: HasManyHasAssociationMixin<CandidateSubmission, string>;
+    declare hasSubmissions: HasManyHasAssociationsMixin<CandidateSubmission, string>;
+    declare addSubmission: HasManyAddAssociationMixin<CandidateSubmission, string>;
+    declare addSubmissions: HasManyAddAssociationsMixin<CandidateSubmission, string>;
+    declare setSubmissions: HasManySetAssociationsMixin<CandidateSubmission, string>;
+    declare removeSubmission: HasManyRemoveAssociationMixin<CandidateSubmission, string>;
+    declare removeSubmissions: HasManyRemoveAssociationsMixin<CandidateSubmission, string>;
+    declare createSubmission: HasManyCreateAssociationMixin<CandidateSubmission, 'candidateId'>;
+
+    declare static associations: {
+        submissions: Association<Candidate, CandidateSubmission>;
+    };
 }
 
 Candidate.init({

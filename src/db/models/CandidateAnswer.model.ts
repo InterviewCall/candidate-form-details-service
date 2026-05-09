@@ -1,4 +1,16 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+    Association,
+    BelongsToCreateAssociationMixin,
+    BelongsToGetAssociationMixin,
+    BelongsToSetAssociationMixin,
+    CreationOptional,
+    DataTypes,
+    ForeignKey,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 
 import CandidateSubmission from './CandidateSubmission.model';
 import FormQuestion from './FormQuestion.model';
@@ -21,6 +33,31 @@ class CandidateAnswer extends Model<InferAttributes<CandidateAnswer>, InferCreat
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
+
+    declare submission?: NonAttribute<CandidateSubmission>;
+    declare question?: NonAttribute<FormQuestion>;
+    declare selectedOption?: NonAttribute<FormQuestionOption | null>;
+
+    // BelongsTo CandidateSubmission mixins
+    declare getSubmission: BelongsToGetAssociationMixin<CandidateSubmission>;
+    declare setSubmission: BelongsToSetAssociationMixin<CandidateSubmission, string>;
+    declare createSubmission: BelongsToCreateAssociationMixin<CandidateSubmission>;
+
+    // BelongsTo FormQuestion mixins
+    declare getQuestion: BelongsToGetAssociationMixin<FormQuestion>;
+    declare setQuestion: BelongsToSetAssociationMixin<FormQuestion, number>;
+    declare createQuestion: BelongsToCreateAssociationMixin<FormQuestion>;
+
+    // BelongsTo FormQuestionOption mixins
+    declare getSelectedOption: BelongsToGetAssociationMixin<FormQuestionOption>;
+    declare setSelectedOption: BelongsToSetAssociationMixin<FormQuestionOption, number>;
+    declare createSelectedOption: BelongsToCreateAssociationMixin<FormQuestionOption>;
+
+    declare static associations: {
+        submission: Association<CandidateAnswer, CandidateSubmission>;
+        question: Association<CandidateAnswer, FormQuestion>;
+        selectedOption: Association<CandidateAnswer, FormQuestionOption>;
+    };
 }
 
 CandidateAnswer.init({

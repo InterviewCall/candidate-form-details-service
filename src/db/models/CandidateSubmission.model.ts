@@ -1,8 +1,31 @@
-import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+    Association,
+    BelongsToCreateAssociationMixin,
+    BelongsToGetAssociationMixin,
+    BelongsToSetAssociationMixin,
+    CreationOptional,
+    DataTypes,
+    ForeignKey,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    HasManySetAssociationsMixin,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+    NonAttribute,
+} from 'sequelize';
 
 import { CandidateSubmissionStatus } from '../../enums/CandidateSubmissionStatus';
 import { LeadTemperature } from '../../enums/LeadTemperature';
 import Candidate from './Candidate.model';
+import CandidateAnswer from './CandidateAnswer.model';
 import QualificationForm from './QualificationForm.model';
 import sequelize from './sequelize';
 
@@ -27,6 +50,38 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
+
+    declare candidate?: NonAttribute<Candidate>;
+    declare form?: NonAttribute<QualificationForm>;
+    declare answers?: NonAttribute<CandidateAnswer[]>;
+
+    // BelongsTo Candidate mixins
+    declare getCandidate: BelongsToGetAssociationMixin<Candidate>;
+    declare setCandidate: BelongsToSetAssociationMixin<Candidate, number>;
+    declare createCandidate: BelongsToCreateAssociationMixin<Candidate>;
+
+    // BelongsTo QualificationForm mixins
+    declare getForm: BelongsToGetAssociationMixin<QualificationForm>;
+    declare setForm: BelongsToSetAssociationMixin<QualificationForm, number>;
+    declare createForm: BelongsToCreateAssociationMixin<QualificationForm>;
+
+    // HasMany CandidateAnswer mixins
+    declare getAnswers: HasManyGetAssociationsMixin<CandidateAnswer>;
+    declare countAnswers: HasManyCountAssociationsMixin;
+    declare hasAnswer: HasManyHasAssociationMixin<CandidateAnswer, number>;
+    declare hasAnswers: HasManyHasAssociationsMixin<CandidateAnswer, number>;
+    declare addAnswer: HasManyAddAssociationMixin<CandidateAnswer, number>;
+    declare addAnswers: HasManyAddAssociationsMixin<CandidateAnswer, number>;
+    declare setAnswers: HasManySetAssociationsMixin<CandidateAnswer, number>;
+    declare removeAnswer: HasManyRemoveAssociationMixin<CandidateAnswer, number>;
+    declare removeAnswers: HasManyRemoveAssociationsMixin<CandidateAnswer, number>;
+    declare createAnswer: HasManyCreateAssociationMixin<CandidateAnswer, 'submissionId'>;
+
+    declare static associations: {
+        candidate: Association<CandidateSubmission, Candidate>;
+        form: Association<CandidateSubmission, QualificationForm>;
+        answers: Association<CandidateSubmission, CandidateAnswer>;
+    };
 }
 
 CandidateSubmission.init({
