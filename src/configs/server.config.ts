@@ -9,6 +9,7 @@ type DBConfig = {
     DB_USER: string
     DB_PASSWORD: string
     DB_NAME: string
+    NODE_ENV?: string
 }
 
 dotenv.config();
@@ -21,5 +22,6 @@ export const dbConfig: DBConfig = {
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_USER: process.env.DB_USER || 'root',
     DB_PASSWORD: process.env.DB_PASSWORD || '1748arijiT#',
-    DB_NAME: process.env.DB_NAME || 'ic_lead'
+    DB_NAME: process.env.DB_NAME || 'ic_lead',
+    NODE_ENV: process.env.NODE_ENV
 };

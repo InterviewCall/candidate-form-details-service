@@ -8,7 +8,7 @@ const sequelize = new Sequelize({
     username: dbConfig.DB_USER,
     password: dbConfig.DB_PASSWORD,
     database: dbConfig.DB_NAME,
-    logging: console.log
+    logging: dbConfig.NODE_ENV == 'development' ? console.log : false
 });
 
 export default sequelize;
