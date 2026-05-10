@@ -1,6 +1,6 @@
 import { NextFunction,Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { AnyZodObject } from 'zod';
+import { ZodTypeAny } from 'zod';
 
 import logger from '../configs/logger.config';
 
@@ -10,7 +10,7 @@ import logger from '../configs/logger.config';
  * @returns - Middlewarefunction to validate the Request Body
  */
 
-export const validateRequestBody = (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
+export const validateRequestBody = (schema: ZodTypeAny) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         await schema.parseAsync(req.body);
         next();
@@ -25,7 +25,7 @@ export const validateRequestBody = (schema: AnyZodObject) => async (req: Request
     }
 };
 
-export const validateRequestQuery = (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
+export const validateRequestQuery = (schema: ZodTypeAny) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         await schema.parseAsync(req.query);
         next();
@@ -40,7 +40,7 @@ export const validateRequestQuery = (schema: AnyZodObject) => async (req: Reques
     }
 };
 
-export const validateRequestParams = (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
+export const validateRequestParams = (schema: ZodTypeAny) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         await schema.parseAsync(req.params);
         next();

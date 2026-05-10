@@ -34,7 +34,7 @@ class FormQuestion extends Model<InferAttributes<FormQuestion>, InferCreationAtt
     declare stepNo: number;
     declare questionKey: string;
     declare questionText: string;
-    declare helperText: string;
+    declare helperText: string | null;
     declare questionType: QuestionType;
     declare isRequired: CreationOptional<boolean>;
     declare sortOrder: CreationOptional<number>;

@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 
 type ServerConfig = {
     PORT: number
+    NODE_ENV?: string
 }
 
 type DBConfig = {
@@ -9,13 +10,13 @@ type DBConfig = {
     DB_USER: string
     DB_PASSWORD: string
     DB_NAME: string
-    NODE_ENV?: string
 }
 
 dotenv.config();
 
 export const serverConfig: ServerConfig =  {
-    PORT: Number(process.env.PORT) || 3000
+    PORT: Number(process.env.PORT) || 3000,
+    NODE_ENV: process.env.NODE_ENV
 };
 
 export const dbConfig: DBConfig = {
@@ -23,5 +24,4 @@ export const dbConfig: DBConfig = {
     DB_USER: process.env.DB_USER || 'root',
     DB_PASSWORD: process.env.DB_PASSWORD || '1748arijiT#',
     DB_NAME: process.env.DB_NAME || 'ic_lead',
-    NODE_ENV: process.env.NODE_ENV
 };
