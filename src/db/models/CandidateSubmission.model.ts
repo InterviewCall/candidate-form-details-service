@@ -22,8 +22,8 @@ import {
     NonAttribute,
 } from 'sequelize';
 
-import { CandidateSubmissionStatus } from '../../enums/CandidateSubmissionStatus';
-import { LeadTemperature } from '../../enums/LeadTemperature';
+import { CandidateSubmissionStatus } from '../../utils/enums/CandidateSubmissionStatus';
+import { LeadTemperature } from '../../utils/enums/LeadTemperature';
 import Candidate from './Candidate.model';
 import CandidateAnswer from './CandidateAnswer.model';
 import QualificationForm from './QualificationForm.model';

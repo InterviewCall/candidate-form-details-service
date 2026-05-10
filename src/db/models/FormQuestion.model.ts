@@ -22,7 +22,7 @@ import {
     NonAttribute,
 } from 'sequelize';
 
-import { QuestionType } from '../../enums/QuestionType';
+import { QuestionType } from '../../utils/enums/QuestionType';
 import CandidateAnswer from './CandidateAnswer.model';
 import FormQuestionOption from './FormQuestionOption.model';
 import QualificationForm from './QualificationForm.model';
