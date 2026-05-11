@@ -7,19 +7,22 @@ import sequelize from '../db/models/sequelize';
 import { AddQuestionToFormDto, CreateQualificationFormDto } from '../dtos/Form.dto';
 import FormQuestionRepository from '../repositories/FormQuestion.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
+import FormStepRepository from '../repositories/FormStep.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
 import { AddQuestionToFormResponse, QualificationFormResponse } from '../types/Response.type';
 import { ConflictError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 
 class FormService {
     private qualificationFormRepository: QualificationFormRepository;
+    private formStepRepository: FormStepRepository;
     private formQuestionRepository: FormQuestionRepository;
     private formQuestionOptionRepository: FormQuestionOptionRepository;
 
-    constructor(qualificationFormRepository: QualificationFormRepository, formQuestionRepository: FormQuestionRepository, formQuestionOptionRepository: FormQuestionOptionRepository) {
+    constructor(qualificationFormRepository: QualificationFormRepository, formQuestionRepository: FormQuestionRepository, formQuestionOptionRepository: FormQuestionOptionRepository, formStepRepository: FormStepRepository) {
         this.qualificationFormRepository = qualificationFormRepository;
         this.formQuestionRepository = formQuestionRepository;
         this.formQuestionOptionRepository = formQuestionOptionRepository;
+        this.formStepRepository = formStepRepository;
     }
 
     async createQualificationForm(payload: CreateQualificationFormDto): Promise<QualificationFormResponse> {
@@ -64,20 +67,35 @@ class FormService {
                 throw new ConflictError(`Question key ${payload.questionKey} is already associated with a question in the given form-id ${formId}`);
             }
 
-            const { options, ...questionPayload } = payload;
+            const { options, ...addQuestionToFormPayload } = payload;
+
+            let formStep = await this.formStepRepository.findOne({
+                formId,
+                stepNo: addQuestionToFormPayload.stepNo
+            });
+
+            if(!formStep) {
+                formStep = await this.formStepRepository.create({
+                    formId,
+                    stepNo: addQuestionToFormPayload.stepNo,
+                    title: addQuestionToFormPayload.stepTitle,
+                    helperText: addQuestionToFormPayload.stepHelperText,
+                    isActive: addQuestionToFormPayload.stepIsActive ?? true
+                }, transaction);
+            }
 
             const question: FormQuestion = await this.formQuestionRepository.create(
                 {
                     formId,
-                    stepNo: questionPayload.stepNo,
-                    questionKey: questionPayload.questionKey,
-                    questionText: questionPayload.questionText,
-                    helperText: questionPayload.helperText ?? null,
-                    questionType: questionPayload.questionType,
-                    isRequired: questionPayload.isRequired ?? true,
-                    sortOrder: questionPayload.sortOrder ?? 1,
-                    validationRules: questionPayload.validationRules ?? null,
-                    isActive: questionPayload.isActive ?? true,
+                    stepId: formStep.id,
+                    questionKey: addQuestionToFormPayload.questionKey,
+                    questionText: addQuestionToFormPayload.questionText,
+                    placeholder: addQuestionToFormPayload.placeholder,
+                    questionType: addQuestionToFormPayload.questionType,
+                    isRequired: addQuestionToFormPayload.isRequired ?? true,
+                    sortOrder: addQuestionToFormPayload.sortOrder ?? 1,
+                    validationRules: addQuestionToFormPayload.validationRules ?? null,
+                    isActive: addQuestionToFormPayload.questionIsActive ?? true
                 },
                 transaction
             );

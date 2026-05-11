@@ -62,12 +62,8 @@ export const addQuestionOptionSchema = z.object({
         .string()
         .trim()
         .min(1, 'Option value is required')
-        .max(150, 'Option value cannot exceed 150 characters')
-        .regex(
-            /^[a-zA-Z0-9_-]+$/,
-            'Option value can contain only letters, numbers, underscore, and hyphen',
-        ),
-
+        .max(150, 'Option value cannot exceed 150 characters'),
+        
     score: z
         .number()
         .int('Score must be an integer')
@@ -98,6 +94,20 @@ export const addQuestionToFormSchema = z
             .min(2, 'Step number must be at least 2')
             .max(8, 'Step number cannot be greater than 8'),
 
+        stepTitle: z
+            .string()
+            .trim()
+            .min(5, 'Step title is required')
+            .max(1000, 'Step title is too long'),
+
+        stepHelperText: z
+            .string()
+            .trim()
+            .min(3, 'Step helper text is required')
+            .max(1000, 'Step helper text is too long'),
+
+        stepIsActive: z.boolean().optional(),
+
         questionKey: z
             .string()
             .trim()
@@ -111,13 +121,13 @@ export const addQuestionToFormSchema = z
         questionText: z
             .string()
             .trim()
-            .min(5, 'Question text is required')
+            .min(2, 'Question text is required')
             .max(1000, 'Question text is too long'),
 
-        helperText: z
+        placeholder: z
             .string()
             .trim()
-            .max(1000, 'Helper text is too long')
+            .max(1000, 'Placeholder is too long')
             .optional()
             .nullable(),
 
@@ -136,12 +146,9 @@ export const addQuestionToFormSchema = z
             .optional()
             .nullable(),
 
-        isActive: z.boolean().optional(),
+        questionIsActive: z.boolean().optional(),
 
-        options: z
-            .array(addQuestionOptionSchema)
-            .optional()
-            .default([]),
+        options: z.array(addQuestionOptionSchema).optional().default([]),
     })
     .superRefine((data, ctx) => {
         const needsOptions = optionBasedQuestionTypes.includes(data.questionType);

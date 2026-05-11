@@ -4,12 +4,13 @@ import { StatusCodes } from 'http-status-codes';
 import { AddQuestionToFormDto, AddQuestionToFormParamsDto, CreateQualificationFormDto } from '../dtos/Form.dto';
 import FormQuestionRepository from '../repositories/FormQuestion.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
+import FormStepRepository from '../repositories/FormStep.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
 import FormService from '../services/Form.service';
 import { AddQuestionToFormResponse, QualificationFormResponse } from '../types/Response.type';
 import { buildSuccessResponse } from '../utils/helpers/response.helper';
 
-const formService = new FormService(new QualificationFormRepository(), new FormQuestionRepository(), new FormQuestionOptionRepository());
+const formService = new FormService(new QualificationFormRepository(), new FormQuestionRepository(), new FormQuestionOptionRepository(), new FormStepRepository());
 
 async function createQualificationFormHandler(req: Request, res: Response, next: NextFunction) {
     try {

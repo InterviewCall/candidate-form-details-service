@@ -1,6 +1,6 @@
 import { NextFunction,Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { ZodTypeAny } from 'zod';
+import { ZodError, ZodTypeAny } from 'zod';
 
 import logger from '../configs/logger.config';
 
@@ -16,7 +16,29 @@ export const validateRequestBody = (schema: ZodTypeAny) => async (req: Request, 
         next();
     } catch (error) {
         //If validation fails 
-        logger.error('Invalid Request Structure', { recievedStructure: req.body });
+        if(error instanceof ZodError) {
+            const formattedErrors = error.issues.map((issue) => ({
+                field: issue.path.join('.'),
+                message: issue.message,
+                code: issue.code
+            }));
+
+            logger.error('Invalid request body', {
+                receivedStructure: req.body,
+                validationErrors: formattedErrors,
+            });
+
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                success: 'false',
+                message: formattedErrors[0]?.message || 'Invalid request body',
+                error: formattedErrors
+            });
+        }
+
+        logger.error('Request body validation failed unexpectedly', {
+            receivedStructure: req.body,
+            error,
+        });
         res.status(StatusCodes.BAD_REQUEST).json({
             success: false,
             message: 'Invalid Request Body',
@@ -31,10 +53,32 @@ export const validateRequestQuery = (schema: ZodTypeAny) => async (req: Request,
         next();
     } catch (error) {
         //If validation fails 
-        logger.error('Invalid Request Structure', { recievedStructure: req.query });
+        if(error instanceof ZodError) {
+            const formattedErrors = error.issues.map((issue) => ({
+                field: issue.path.join('.'),
+                message: issue.message,
+                code: issue.code
+            }));
+
+            logger.error('Invalid request body', {
+                receivedStructure: req.body,
+                validationErrors: formattedErrors,
+            });
+
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                success: 'false',
+                message: formattedErrors[0]?.message || 'Invalid request body',
+                error: formattedErrors
+            });
+        }
+
+        logger.error('Request body validation failed unexpectedly', {
+            receivedStructure: req.body,
+            error,
+        });
         res.status(StatusCodes.BAD_REQUEST).json({
             success: false,
-            message: 'Invalid Request Query',
+            message: 'Invalid Request Body',
             error
         });
     }
@@ -46,10 +90,32 @@ export const validateRequestParams = (schema: ZodTypeAny) => async (req: Request
         next();
     } catch (error) {
         //If validation fails 
-        logger.error('Invalid Request Structure', { recievedStructure: req.params });
+        if(error instanceof ZodError) {
+            const formattedErrors = error.issues.map((issue) => ({
+                field: issue.path.join('.'),
+                message: issue.message,
+                code: issue.code
+            }));
+
+            logger.error('Invalid request body', {
+                receivedStructure: req.body,
+                validationErrors: formattedErrors,
+            });
+
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                success: 'false',
+                message: formattedErrors[0]?.message || 'Invalid request body',
+                error: formattedErrors
+            });
+        }
+
+        logger.error('Request body validation failed unexpectedly', {
+            receivedStructure: req.body,
+            error,
+        });
         res.status(StatusCodes.BAD_REQUEST).json({
             success: false,
-            message: 'Invalid Request Params',
+            message: 'Invalid Request Body',
             error
         });
     }
