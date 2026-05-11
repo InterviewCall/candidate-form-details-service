@@ -4,3 +4,13 @@ export interface SuccessResponse<T> {
     data: T
     error: object
 }
+
+export type QualificationFormResponse = {
+    formId: number
+    slug: string
+}
+
+export type AddQuestionToFormResponse = {
+    formId: number
+    questionId: number
+}

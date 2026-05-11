@@ -8,6 +8,7 @@ import { AddQuestionToFormDto, CreateQualificationFormDto } from '../dtos/Form.d
 import FormQuestionRepository from '../repositories/FormQuestion.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
+import { AddQuestionToFormResponse, QualificationFormResponse } from '../types/Response.type';
 import { ConflictError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 
 class FormService {
@@ -21,14 +22,17 @@ class FormService {
         this.formQuestionOptionRepository = formQuestionOptionRepository;
     }
 
-    async createQualificationForm(payload: CreateQualificationFormDto): Promise<QualificationForm> {
+    async createQualificationForm(payload: CreateQualificationFormDto): Promise<QualificationFormResponse> {
         try {
             const existingForm = await this.qualificationFormRepository.findOne({ slug: payload.slug });
             if(existingForm) {
-                return existingForm;
+                return {
+                    formId: existingForm.id,
+                    slug: existingForm.slug
+                };
             }
 
-            const form = await this.qualificationFormRepository.create({
+            const form: QualificationForm = await this.qualificationFormRepository.create({
                 name: payload.name,
                 slug: payload.slug,
                 segmentKey: payload.segmentKey,
@@ -37,15 +41,18 @@ class FormService {
                 isActive: payload.isActive ?? true
             });
 
-            return form;
+            return {
+                formId: form.id,
+                slug: form.slug
+            };
         } catch (error) {
             logger.error(error);
             throw new InternalServerError('Something went wrong, try again');
         }
     }
 
-    async addQuestionOptionsToForm(formId: number, payload: AddQuestionToFormDto): Promise<Record<string, number>> {
-        const form = await this.qualificationFormRepository.findById(formId);
+    async addQuestionOptionsToForm(formId: number, payload: AddQuestionToFormDto): Promise<AddQuestionToFormResponse> {
+        const form: QualificationForm | null = await this.qualificationFormRepository.findById(formId);
         if(!form) {
             throw new NotFoundError(`Qualification form not found for the given form-id: ${formId}`);
         }

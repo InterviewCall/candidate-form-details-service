@@ -1,7 +1,8 @@
+import cors from 'cors';
 import express from 'express';
 
 import logger from './configs/logger.config';
-import { serverConfig } from './configs/server.config';
+import { frontendConfig, serverConfig } from './configs/server.config';
 import setupAssociations from './db/models/associations';
 import sequelize from './db/models/sequelize';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
@@ -9,6 +10,11 @@ import { appErrorHandler, genericErrorHandler } from './middlewares/error.middle
 import apiRouter from './routes';
 
 const app = express();
+
+app.use(cors({
+    origin: [frontendConfig.FRONTEND_URL],
+    credentials: true
+}));
 
 app.use(express.json());
 

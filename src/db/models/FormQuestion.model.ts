@@ -25,16 +25,17 @@ import {
 import { QuestionType } from '../../utils/enums/QuestionType';
 import CandidateAnswer from './CandidateAnswer.model';
 import FormQuestionOption from './FormQuestionOption.model';
+import FormStep from './FormStep.model';
 import QualificationForm from './QualificationForm.model';
 import sequelize from './sequelize';
 
 class FormQuestion extends Model<InferAttributes<FormQuestion>, InferCreationAttributes<FormQuestion>> {
     declare id: CreationOptional<number>;
     declare formId: ForeignKey<QualificationForm['id']>;
-    declare stepNo: number;
+    declare stepId: ForeignKey<FormStep['id']>;
     declare questionKey: string;
     declare questionText: string;
-    declare helperText: string | null;
+    declare placeholder: CreationOptional<string | null>;
     declare questionType: QuestionType;
     declare isRequired: CreationOptional<boolean>;
     declare sortOrder: CreationOptional<number>;
@@ -45,6 +46,7 @@ class FormQuestion extends Model<InferAttributes<FormQuestion>, InferCreationAtt
     declare deletedAt: CreationOptional<Date | null>;
 
     declare form?: NonAttribute<QualificationForm>;
+    declare step?: NonAttribute<FormStep>;
     declare options?: NonAttribute<FormQuestionOption[]>;
     declare answers?: NonAttribute<CandidateAnswer[]>;
 
@@ -52,6 +54,11 @@ class FormQuestion extends Model<InferAttributes<FormQuestion>, InferCreationAtt
     declare getForm: BelongsToGetAssociationMixin<QualificationForm>;
     declare setForm: BelongsToSetAssociationMixin<QualificationForm, number>;
     declare createForm: BelongsToCreateAssociationMixin<QualificationForm>;
+
+    // BelongsTo FormStep mixins
+    declare getStep: BelongsToGetAssociationMixin<FormStep>;
+    declare setStep: BelongsToSetAssociationMixin<FormStep, number>;
+    declare createStep: BelongsToCreateAssociationMixin<FormStep>;
 
     // HasMany FormQuestionOption mixins
     declare getOptions: HasManyGetAssociationsMixin<FormQuestionOption>;
@@ -79,6 +86,7 @@ class FormQuestion extends Model<InferAttributes<FormQuestion>, InferCreationAtt
 
     declare static associations: {
         form: Association<FormQuestion, QualificationForm>;
+        step: Association<FormQuestion, FormStep>;
         options: Association<FormQuestion, FormQuestionOption>;
         answers: Association<FormQuestion, CandidateAnswer>;
     };
@@ -102,9 +110,15 @@ FormQuestion.init({
         onUpdate: 'CASCADE'
     },
 
-    stepNo: {
+    stepId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
+        references: {
+            model: FormStep,
+            key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
     },
 
     questionKey: {
@@ -117,7 +131,7 @@ FormQuestion.init({
         allowNull: false,
     },
 
-    helperText: {
+    placeholder: {
         type: DataTypes.TEXT,
         allowNull: true,
         defaultValue: null,

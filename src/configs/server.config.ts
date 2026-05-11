@@ -12,6 +12,10 @@ type DBConfig = {
     DB_NAME: string
 }
 
+type FrontendConfig = {
+    FRONTEND_URL: string
+}
+
 dotenv.config();
 
 export const serverConfig: ServerConfig =  {
@@ -24,4 +28,8 @@ export const dbConfig: DBConfig = {
     DB_USER: process.env.DB_USER || 'root',
     DB_PASSWORD: process.env.DB_PASSWORD || '1748arijiT#',
     DB_NAME: process.env.DB_NAME || 'ic_lead',
+};
+
+export const frontendConfig: FrontendConfig = {
+    FRONTEND_URL: String(process.env.FRONTEND_URL)
 };

@@ -3,9 +3,20 @@ import CandidateAnswer from './CandidateAnswer.model';
 import CandidateSubmission from './CandidateSubmission.model';
 import FormQuestion from './FormQuestion.model';
 import FormQuestionOption from './FormQuestionOption.model';
+import FormStep from './FormStep.model';
 import QualificationForm from './QualificationForm.model';
 
 function setupAssociations(): void {
+    QualificationForm.hasMany(FormStep, {
+        foreignKey: 'formId',
+        as: 'steps',
+    });
+
+    FormStep.belongsTo(QualificationForm, {
+        foreignKey: 'formId',
+        as: 'form',
+    });
+
     QualificationForm.hasMany(FormQuestion, {
         foreignKey: 'formId',
         as: 'questions',
@@ -14,6 +25,16 @@ function setupAssociations(): void {
     FormQuestion.belongsTo(QualificationForm, {
         foreignKey: 'formId',
         as: 'form',
+    });
+
+    FormStep.hasMany(FormQuestion, {
+        foreignKey: 'stepId',
+        as: 'questions',
+    });
+
+    FormQuestion.belongsTo(FormStep, {
+        foreignKey: 'stepId',
+        as: 'step',
     });
 
     FormQuestion.hasMany(FormQuestionOption, {

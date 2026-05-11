@@ -20,6 +20,7 @@ import {
 
 import CandidateSubmission from './CandidateSubmission.model';
 import FormQuestion from './FormQuestion.model';
+import FormStep from './FormStep.model';
 import sequelize from './sequelize';
 
 class QualificationForm extends Model<InferAttributes<QualificationForm>, InferCreationAttributes<QualificationForm>> {
@@ -34,9 +35,23 @@ class QualificationForm extends Model<InferAttributes<QualificationForm>, InferC
     declare updatedAt: CreationOptional<Date>;
     declare deletedAt: CreationOptional<Date | null>;
 
+    declare steps?: NonAttribute<FormStep[]>;
     declare questions?: NonAttribute<FormQuestion[]>;
     declare submissions?: NonAttribute<CandidateSubmission[]>;
 
+    // HasMany FormStep mixins
+    declare getSteps: HasManyGetAssociationsMixin<FormStep>;
+    declare countSteps: HasManyCountAssociationsMixin;
+    declare hasStep: HasManyHasAssociationMixin<FormStep, number>;
+    declare hasSteps: HasManyHasAssociationsMixin<FormStep, number>;
+    declare addStep: HasManyAddAssociationMixin<FormStep, number>;
+    declare addSteps: HasManyAddAssociationsMixin<FormStep, number>;
+    declare setSteps: HasManySetAssociationsMixin<FormStep, number>;
+    declare removeStep: HasManyRemoveAssociationMixin<FormStep, number>;
+    declare removeSteps: HasManyRemoveAssociationsMixin<FormStep, number>;
+    declare createStep: HasManyCreateAssociationMixin<FormStep, 'formId'>;
+
+    // HasMany FormQuestion mixins
     declare getQuestions: HasManyGetAssociationsMixin<FormQuestion>;
     declare countQuestions: HasManyCountAssociationsMixin;
     declare hasQuestion: HasManyHasAssociationMixin<FormQuestion, number>;
@@ -48,6 +63,7 @@ class QualificationForm extends Model<InferAttributes<QualificationForm>, InferC
     declare removeQuestions: HasManyRemoveAssociationsMixin<FormQuestion, number>;
     declare createQuestion: HasManyCreateAssociationMixin<FormQuestion, 'formId'>;
 
+    // HasMany CandidateSubmission mixins
     declare getSubmissions: HasManyGetAssociationsMixin<CandidateSubmission>;
     declare countSubmissions: HasManyCountAssociationsMixin;
     declare hasSubmission: HasManyHasAssociationMixin<CandidateSubmission, string>;
@@ -60,6 +76,7 @@ class QualificationForm extends Model<InferAttributes<QualificationForm>, InferC
     declare createSubmission: HasManyCreateAssociationMixin<CandidateSubmission,'formId'>;
 
     declare static associations: {
+        steps: Association<QualificationForm, FormStep>;
         questions: Association<QualificationForm, FormQuestion>;
         submissions: Association<QualificationForm, CandidateSubmission>;
     };

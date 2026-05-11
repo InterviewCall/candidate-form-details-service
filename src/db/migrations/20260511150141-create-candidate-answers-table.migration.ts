@@ -43,7 +43,8 @@ export default {
                 INDEX idx_candidate_answers_submission_id (submission_id),
                 INDEX idx_candidate_answers_question_id (question_id),
                 INDEX idx_candidate_answers_question_key (question_key),
-                INDEX idx_candidate_answers_selected_option_id (selected_option_id)
+                INDEX idx_candidate_answers_selected_option_id (selected_option_id),
+                INDEX idx_candidate_answers_submission_question_key (submission_id, question_key)
             );
         `);
     },
