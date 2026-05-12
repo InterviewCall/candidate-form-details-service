@@ -1,3 +1,5 @@
+import { QuestionType } from '../utils/enums/QuestionType';
+
 export interface SuccessResponse<T> {
     success: boolean
     message: string
@@ -27,7 +29,7 @@ export type Question = {
     questionKey: string;
     questionText: string;
     placeholder: string | null;
-    questionType: string;
+    questionType: QuestionType;
     isRequired: boolean;
     sortOrder: number;
     validationRules: object | null;

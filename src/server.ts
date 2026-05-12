@@ -12,7 +12,7 @@ import apiRouter from './routes';
 const app = express();
 
 app.use(cors({
-    origin: [frontendConfig.FRONTEND_URL],
+    origin: [frontendConfig.ADMIN_FRONTEND_URL, frontendConfig.CANDIDATE_FRONTEND_URL],
     credentials: true
 }));
 

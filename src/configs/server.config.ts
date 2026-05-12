@@ -15,7 +15,8 @@ type DBConfig = {
 }
 
 type FrontendConfig = {
-    FRONTEND_URL: string
+    ADMIN_FRONTEND_URL: string,
+    CANDIDATE_FRONTEND_URL: string,
 }
 
 dotenv.config();
@@ -35,5 +36,6 @@ export const dbConfig: DBConfig = {
 };
 
 export const frontendConfig: FrontendConfig = {
-    FRONTEND_URL: String(process.env.FRONTEND_URL)
+    ADMIN_FRONTEND_URL: String(process.env.ADMIN_FRONTEND_URL),
+    CANDIDATE_FRONTEND_URL: String(process.env.CANDIDATE_FRONTEND_URL)
 };
