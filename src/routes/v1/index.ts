@@ -9,4 +9,6 @@ v1Router.use('/ping', pingRouter);
 
 v1Router.use('/admin', formRouter);
 
+v1Router.use('/forms', formRouter);
+
 export default v1Router;

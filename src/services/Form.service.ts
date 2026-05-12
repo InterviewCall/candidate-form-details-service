@@ -1,6 +1,9 @@
+import Redis from 'ioredis';
 import { Transaction } from 'sequelize';
 
 import logger from '../configs/logger.config';
+import { getRedisClient } from '../configs/redis.config';
+import { QUALIFICATION_FORM_CACHE_TTL_IN_SECONDS } from '../constants/ttl';
 import FormQuestion from '../db/models/FormQuestion.model';
 import QualificationForm from '../db/models/QualificationForm.model';
 import sequelize from '../db/models/sequelize';
@@ -9,7 +12,7 @@ import FormQuestionRepository from '../repositories/FormQuestion.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
 import FormStepRepository from '../repositories/FormStep.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
-import { AddQuestionToFormResponse, QualificationFormResponse } from '../types/Response.type';
+import { AddQuestionToFormResponse, CreateQualificationFormResponse, GetQualificationFormForCandidateResponse } from '../types/Response.type';
 import { ConflictError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 
 class FormService {
@@ -25,7 +28,7 @@ class FormService {
         this.formStepRepository = formStepRepository;
     }
 
-    async createQualificationForm(payload: CreateQualificationFormDto): Promise<QualificationFormResponse> {
+    async createQualificationForm(payload: CreateQualificationFormDto): Promise<CreateQualificationFormResponse> {
         try {
             const existingForm = await this.qualificationFormRepository.findOne({ slug: payload.slug });
             if(existingForm) {
@@ -131,6 +134,91 @@ class FormService {
 
             throw new InternalServerError('Something went wrong, try again');
         }
+    }
+
+    async getQualificationFormForCandidate(slug: string): Promise<GetQualificationFormForCandidateResponse> {
+        const cacheKey = `qualification_form:slug:${slug}`;
+
+        try {
+            const redis: Redis = getRedisClient();
+
+            const cachedForm: string | null = await redis.get(cacheKey);
+
+            if(cachedForm) {
+                logger.info('Qualification form served from Redis cache', {
+                    slug,
+                    cacheKey
+                });
+
+                return JSON.parse(cachedForm) as GetQualificationFormForCandidateResponse;
+            }
+
+            const form: QualificationForm | null = await this.qualificationFormRepository.findQualificationFormWithQuestionsAndOptions(slug);
+
+            if(!form) {
+                throw new NotFoundError(`Form is not found with the slug: ${slug}`);
+            }
+
+            if(!form.steps || form.steps.length == 0) {
+                throw new ConflictError('Qualification form is not ready yet');
+            }
+
+            const qualificationForm: GetQualificationFormForCandidateResponse = this.mapQualificationFormForCandidate(form);
+
+            await redis.set(
+                cacheKey,
+                JSON.stringify(qualificationForm),
+                'EX',
+                QUALIFICATION_FORM_CACHE_TTL_IN_SECONDS
+            );
+
+            logger.info('Qualification form stored in Redis cache', {
+                slug,
+                cacheKey,
+                ttl: QUALIFICATION_FORM_CACHE_TTL_IN_SECONDS,
+            });
+
+            return qualificationForm;
+        } catch (error) {
+            logger.error(error);
+
+            if(error instanceof NotFoundError || error instanceof ConflictError) {
+                throw error;
+            }
+
+            throw new InternalServerError('Something went wrong');
+        }
+    }
+
+    private mapQualificationFormForCandidate(form: QualificationForm): GetQualificationFormForCandidateResponse {
+        return {
+            id: form.id,
+            name: form.name,
+            slug: form.slug,
+            segmentKey: form.segmentKey,
+            steps: form.steps?.map((step) => ({
+                id: step.id,
+                stepNo: step.stepNo,
+                title: step.title,
+                helperText: step.helperText,
+                questions: step.questions?.map((question) => ({
+                    id: question.id,
+                    questionKey: question.questionKey,
+                    questionText: question.questionText,
+                    placeholder: question.placeholder,
+                    questionType: question.questionType,
+                    isRequired: question.isRequired,
+                    sortOrder: question.sortOrder,
+                    validationRules: question.validationRules,
+                    options: question.options?.map((option) => ({
+                        id: option.id,
+                        optionLabel: option.optionLabel,
+                        optionValue: option.optionValue,
+                        sortOrder: option.sortOrder
+                    })) ?? []
+                })) ?? []
+            })) ?? []
+        };
     }
 }
 

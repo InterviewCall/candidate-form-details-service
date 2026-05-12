@@ -5,7 +5,8 @@ import { validateRequestBody, validateRequestParams } from '../../validators';
 import { 
     addQuestionToFormParamsSchema,
     addQuestionToFormSchema,
-    createQualificationFormSchema 
+    createQualificationFormSchema, 
+    getQualificationFormParamsSchema
 } from '../../validators/form.validator';
 
 const formRouter = Router();
@@ -21,6 +22,12 @@ formRouter.post(
     validateRequestParams(addQuestionToFormParamsSchema), 
     validateRequestBody(addQuestionToFormSchema), 
     formController.addQuestionToFormHandler
+);
+
+formRouter.get(
+    '/:slug',
+    validateRequestParams(getQualificationFormParamsSchema),
+    formController.getQualificationFormForCandidateHandler
 );
 
 export default formRouter;

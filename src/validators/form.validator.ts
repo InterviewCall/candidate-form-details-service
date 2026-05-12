@@ -236,3 +236,15 @@ export const createManyFormQuestionOptionsSchema = z.object({
         });
     }
 });
+
+export const getQualificationFormParamsSchema = z.object({
+    slug: z
+        .string()
+        .trim()
+        .min(3, 'Form slug is required')
+        .max(150, 'Form slug cannot exceed 150 characters')
+        .regex(
+            /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+            'Invalid form slug format',
+        ),
+});

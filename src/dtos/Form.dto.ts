@@ -6,7 +6,8 @@ import {
     createFormQuestionOptionParamsSchema, 
     createFormQuestionOptionSchema, 
     createManyFormQuestionOptionsSchema, 
-    createQualificationFormSchema 
+    createQualificationFormSchema, 
+    getQualificationFormParamsSchema
 } from '../validators/form.validator';
 
 export type CreateQualificationFormDto = z.infer<typeof createQualificationFormSchema>;
@@ -14,6 +15,8 @@ export type CreateQualificationFormDto = z.infer<typeof createQualificationFormS
 export type AddQuestionToFormDto = z.infer<typeof addQuestionToFormSchema>;
 
 export type AddQuestionToFormParamsDto = z.infer<typeof addQuestionToFormParamsSchema>;
+
+export type GetQualificationFormParamsDto = z.infer<typeof getQualificationFormParamsSchema>;
 
 export type CreateFormQuestionOptionInput = z.infer<typeof createFormQuestionOptionSchema>;
 
