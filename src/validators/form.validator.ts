@@ -35,6 +35,16 @@ export const createQualificationFormSchema = z.object({
             'Segment key must contain lowercase letters, numbers, and underscore only',
         ),
 
+    title: z
+        .string()
+        .trim()
+        .max(3000, 'title is too long'),
+
+    subTitle: z
+        .string()
+        .trim()
+        .max(3000, 'subTitle is too long'),
+
     description: z
         .string()
         .trim()

@@ -42,6 +42,8 @@ class FormService {
                 name: payload.name,
                 slug: payload.slug,
                 segmentKey: payload.segmentKey,
+                title: payload.title,
+                subTitle: payload.subTitle,
                 description: payload.description ?? null,
                 version: payload.version ?? 1,
                 isActive: payload.isActive ?? true
@@ -196,6 +198,8 @@ class FormService {
             name: form.name,
             slug: form.slug,
             segmentKey: form.segmentKey,
+            title: form.title,
+            subTitle: form.subTitle,
             steps: form.steps?.map((step) => ({
                 id: step.id,
                 stepNo: step.stepNo,

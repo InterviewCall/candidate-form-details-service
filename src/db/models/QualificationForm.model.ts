@@ -28,6 +28,8 @@ class QualificationForm extends Model<InferAttributes<QualificationForm>, InferC
     declare name: string;
     declare slug: string;
     declare segmentKey: string;
+    declare title: string;
+    declare subTitle: string;
     declare description: CreationOptional<string | null>;
     declare version: CreationOptional<number>;
     declare isActive: CreationOptional<boolean>;
@@ -102,6 +104,16 @@ QualificationForm.init({
 
     segmentKey: {
         type: DataTypes.STRING(80),
+        allowNull: false
+    },
+
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+
+    subTitle: {
+        type: DataTypes.TEXT,
         allowNull: false
     },
 

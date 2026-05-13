@@ -49,5 +49,7 @@ export type GetQualificationFormForCandidateResponse = {
     name: string;
     slug: string;
     segmentKey: string;
+    title: string;
+    subTitle: string;
     steps: Step[]
 };

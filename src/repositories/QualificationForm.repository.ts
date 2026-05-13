@@ -15,7 +15,7 @@ class QualificationFormRepository extends BaseRepository<QualificationForm> {
                 slug,
                 isActive: true,
             },
-            attributes: ['id', 'name', 'slug', 'segmentKey', 'description'],
+            attributes: ['id', 'name', 'slug', 'segmentKey', 'title', 'subTitle'],
             include: [
                 {
                     model: FormStep,
