@@ -69,6 +69,18 @@ class QualificationFormRepository extends BaseRepository<QualificationForm> {
 
         return form;
     }
+
+    async findFormIdWithSlug(slug: string): Promise<QualificationForm | null> {
+        const form = await this.model.findOne({
+            where: {
+                slug,
+                isActive: true
+            },
+            attributes: ['id']
+        });
+
+        return form;
+    }
 }
 
 export default QualificationFormRepository;

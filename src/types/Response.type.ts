@@ -53,3 +53,12 @@ export type GetQualificationFormForCandidateResponse = {
     subTitle: string;
     steps: Step[]
 };
+
+export type CreateCandidateResponse = {
+    candidateId: number,
+    submissionId: string
+}
+
+export type CreateSubmissionResponse = {
+    submissionId: string
+};

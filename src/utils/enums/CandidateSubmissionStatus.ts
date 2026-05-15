@@ -1,9 +1,7 @@
 export enum CandidateSubmissionStatus {
-    SUBMITTED = 'submitted',
+    SUBMISSION_PENDING = 'submission_pending',
     BOOKING_PENDING = 'booking_pending',
     BOOKED = 'booked',
-    CONTACTED = 'contacted',
-    QUALIFIED = 'qualified',
-    NOT_QUALIFIED = 'not_qualified',
     CONVERTED = 'converted',
+    CANCELLED = 'cancelled'
 }

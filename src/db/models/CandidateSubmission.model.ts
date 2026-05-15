@@ -33,8 +33,10 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
     declare id: CreationOptional<string>;
     declare candidateId: ForeignKey<Candidate['id']>;
     declare formId: ForeignKey<QualificationForm['id']>;
+    declare formSlug: string;
     declare source: CreationOptional<string | null>;
     declare landingPage: CreationOptional<string | null>;
+    declare referrerUrl: CreationOptional<string | null>;
 
     declare utmSource: CreationOptional<string | null>;
     declare utmMedium: CreationOptional<string | null>;
@@ -45,7 +47,7 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
     declare status: CreationOptional<CandidateSubmissionStatus>;
     declare leadScore: CreationOptional<number | null>;
     declare leadTemperature: CreationOptional<LeadTemperature | null>;
-    declare submittedAt: CreationOptional<Date>;
+    declare submittedAt: CreationOptional<Date | null>;
 
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
@@ -113,6 +115,11 @@ CandidateSubmission.init({
         onUpdate: 'CASCADE',
     },
 
+    formSlug: {
+        type: DataTypes.STRING(100),
+        allowNull: false
+    },
+
     source: {
         type: DataTypes.STRING(100),
         allowNull: true,
@@ -120,9 +127,15 @@ CandidateSubmission.init({
     },
 
     landingPage: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.TEXT,
         allowNull: true,
         defaultValue: null,
+    },
+
+    referrerUrl: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null
     },
 
     utmSource: {
@@ -158,7 +171,6 @@ CandidateSubmission.init({
     status: {
         type: DataTypes.ENUM(...Object.values(CandidateSubmissionStatus)),
         allowNull: false,
-        defaultValue: CandidateSubmissionStatus.BOOKING_PENDING,
     },
 
     leadScore: {
@@ -175,8 +187,8 @@ CandidateSubmission.init({
 
     submittedAt: {
         type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
+        allowNull: true,
+        defaultValue: null,
     },
 
     createdAt: {

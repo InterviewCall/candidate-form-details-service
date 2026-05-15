@@ -14,6 +14,7 @@ import FormStepRepository from '../repositories/FormStep.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
 import { AddQuestionToFormResponse, CreateQualificationFormResponse, GetQualificationFormForCandidateResponse } from '../types/Response.type';
 import { ConflictError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
+import { mapQualificationFormForCandidate } from '../utils/helpers/response.helper';
 
 class FormService {
     private qualificationFormRepository: QualificationFormRepository;
@@ -165,7 +166,7 @@ class FormService {
                 throw new ConflictError('Qualification form is not ready yet');
             }
 
-            const qualificationForm: GetQualificationFormForCandidateResponse = this.mapQualificationFormForCandidate(form);
+            const qualificationForm: GetQualificationFormForCandidateResponse = mapQualificationFormForCandidate(form);
 
             await redis.set(
                 cacheKey,
@@ -190,39 +191,6 @@ class FormService {
 
             throw new InternalServerError('Something went wrong');
         }
-    }
-
-    private mapQualificationFormForCandidate(form: QualificationForm): GetQualificationFormForCandidateResponse {
-        return {
-            id: form.id,
-            name: form.name,
-            slug: form.slug,
-            segmentKey: form.segmentKey,
-            title: form.title,
-            subTitle: form.subTitle,
-            steps: form.steps?.map((step) => ({
-                id: step.id,
-                stepNo: step.stepNo,
-                title: step.title,
-                helperText: step.helperText,
-                questions: step.questions?.map((question) => ({
-                    id: question.id,
-                    questionKey: question.questionKey,
-                    questionText: question.questionText,
-                    placeholder: question.placeholder,
-                    questionType: question.questionType,
-                    isRequired: question.isRequired,
-                    sortOrder: question.sortOrder,
-                    validationRules: question.validationRules,
-                    options: question.options?.map((option) => ({
-                        id: option.id,
-                        optionLabel: option.optionLabel,
-                        optionValue: option.optionValue,
-                        sortOrder: option.sortOrder
-                    })) ?? []
-                })) ?? []
-            })) ?? []
-        };
     }
 }
 

@@ -19,7 +19,7 @@ abstract class BaseRepository<M extends Model> {
         return record;
     }
 
-    async findById(id: number): Promise<M | null> {
+    async findById(id: number | string): Promise<M | null> {
         const record = await this.model.findByPk(id);
         return record;
     }
@@ -32,7 +32,7 @@ abstract class BaseRepository<M extends Model> {
         return record;
     }
 
-    async updateById(id: number, data: Partial<InferAttributes<M>>): Promise<M> {
+    async updateById(id: number | string, data: Partial<InferAttributes<M>>): Promise<M> {
         const record = await this.model.findByPk(id);
 
         if(!record) {
