@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize';
+import { validate as isValidUUID } from 'uuid';
 
 import logger from '../configs/logger.config';
 import type Candidate from '../db/models/Candidate.model';
@@ -11,10 +12,10 @@ import CandidateAnswerRepository from '../repositories/CandidateAnswer.repositor
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
-import { CreateCandidateResponse, CreateSubmissionResponse } from '../types/Response.type';
+import { CreateCandidateResponse, CreateSubmissionResponse, GetCandidateResponse, GetCandidateSubmissionResponse } from '../types/Response.type';
 import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 import { LeadTemperature } from '../utils/enums/LeadTemperature';
-import { InternalServerError, NotFoundError } from '../utils/errors/app.error';
+import { BadRequestError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 import { FORM_SCORING_QUESTION_KEYS } from '../utils/factories/scoringQuestionKeysFactory';
 
 class CandidateService {
@@ -157,6 +158,59 @@ class CandidateService {
             await transaction.rollback();
 
             logger.error(error);
+
+            throw new InternalServerError('Something went wrong, try again');
+        }
+    }
+
+    async findCandidate(candidateId: number): Promise<GetCandidateResponse> {
+        try {
+            const candidate = await this.candidateRepository.findById(candidateId);
+
+            if(!candidate) {
+                throw new NotFoundError('No details found please register yourself');
+            }
+
+            return {
+                id: candidate.id,
+                fullName: candidate.fullName,
+                email: candidate.email,
+                phone: candidate.phone
+            };
+        } catch (error) {
+            logger.error('Candidate Not found', error);
+
+            if(error instanceof NotFoundError) {
+                throw error;
+            }
+
+            throw new InternalServerError('Something went wrong, try again');
+        }
+    }
+
+    async findCandidateSubmission(submissionId: string): Promise<GetCandidateSubmissionResponse> {
+        try {
+            if(!isValidUUID(submissionId)) {
+                throw new BadRequestError('Submission Id should be a valid UUID');
+            }
+
+            const candidateSubmission = await this.candidateSubmissionRepository.findById(submissionId);
+
+            if(!candidateSubmission) {
+                throw new NotFoundError('You have not submitted any qualification form, please submit it first');
+            }
+
+            return {
+                submissionId: candidateSubmission.id,
+                candidateId: candidateSubmission.candidateId
+            };
+        } catch (error) {
+            logger.error('Submission api error', error);
+            console.log(error);
+
+            if(error instanceof BadRequestError || error instanceof NotFoundError) {
+                throw error;
+            }
 
             throw new InternalServerError('Something went wrong, try again');
         }

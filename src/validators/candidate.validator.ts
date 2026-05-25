@@ -164,3 +164,27 @@ export const createCandidateSubmissionSchema = z
             }),
     })
     .strict();
+
+export const getCandidateSubmissionParamsSchema = z.object({
+    submissionId: z
+        .string({
+            message: 'Submission id is required',
+        })
+        .trim()
+        .uuid({
+            message: 'Invalid submission id',
+        }),
+});
+
+export const getCandidateParamsSchema = z.object({
+    candidateId: z.coerce
+        .number({
+            message: 'Candidate id is required',
+        })
+        .int({
+            message: 'Candidate id must be an integer',
+        })
+        .positive({
+            message: 'Candidate id must be a positive number',
+        }),
+});

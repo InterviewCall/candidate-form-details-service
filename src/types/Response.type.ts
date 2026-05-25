@@ -62,3 +62,15 @@ export type CreateCandidateResponse = {
 export type CreateSubmissionResponse = {
     submissionId: string
 };
+
+export type GetCandidateSubmissionResponse = {
+    submissionId: string,
+    candidateId: number
+}
+
+export type GetCandidateResponse = {
+    id: number,
+    fullName: string,
+    email: string,
+    phone: string
+}

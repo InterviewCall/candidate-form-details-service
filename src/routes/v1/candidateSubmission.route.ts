@@ -1,15 +1,22 @@
 import { Router } from 'express';
 
 import candidateController from '../../controllers/candidate.controller';
-import { validateRequestParams } from '../../validators';
-import { createCandidateSubmissionParamsSchema } from '../../validators/candidate.validator';
+import { validateRequestBody, validateRequestParams } from '../../validators';
+import { createCandidateSubmissionParamsSchema, createCandidateSubmissionSchema, getCandidateSubmissionParamsSchema } from '../../validators/candidate.validator';
 
 const submissionRouter = Router();
 
-submissionRouter.post(
+submissionRouter.put(
     '/:submissionId',
     validateRequestParams(createCandidateSubmissionParamsSchema),
+    validateRequestBody(createCandidateSubmissionSchema),
     candidateController.createCandidateSubmissionHandler
+);
+
+submissionRouter.get(
+    '/:submissionId',
+    validateRequestParams(getCandidateSubmissionParamsSchema),
+    candidateController.getCandidateSubmissionHandler
 );
 
 export default submissionRouter;
