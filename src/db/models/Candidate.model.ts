@@ -22,7 +22,7 @@ import CandidateSubmission from './CandidateSubmission.model';
 import sequelize from './sequelize';
 
 class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttributes<Candidate>> {
-    declare id: CreationOptional<bigint>;
+    declare id: CreationOptional<number>;
     declare fullName: string;
     declare email: string;
     declare phone: string;
