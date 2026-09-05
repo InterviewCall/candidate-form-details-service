@@ -55,7 +55,7 @@ export type GetQualificationFormForCandidateResponse = {
 };
 
 export type CreateCandidateResponse = {
-    candidateId: number,
+    candidateId: string,
     submissionId: string
 }
 

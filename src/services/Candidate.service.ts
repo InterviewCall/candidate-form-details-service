@@ -78,7 +78,7 @@ class CandidateService {
             await transaction.commit();
 
             return {
-                candidateId: candidate.id,
+                candidateId: candidate.public_id,
                 submissionId: submission.id
             };
         } catch (error) {

@@ -23,6 +23,7 @@ import sequelize from './sequelize';
 
 class Candidate extends Model<InferAttributes<Candidate>, InferCreationAttributes<Candidate>> {
     declare id: CreationOptional<number>;
+    declare public_id: CreationOptional<string>;
     declare fullName: string;
     declare email: string;
     declare phone: string;
@@ -54,6 +55,12 @@ Candidate.init({
         type: DataTypes.BIGINT.UNSIGNED,
         autoIncrement: true,
         primaryKey: true
+    },
+
+    public_id: {
+        type: DataTypes.UUID,
+        defaultValue: crypto.randomUUID(),
+        allowNull: false
     },
 
     fullName: {

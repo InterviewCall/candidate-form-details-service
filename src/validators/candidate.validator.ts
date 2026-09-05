@@ -116,7 +116,7 @@ export const createCandidateAnswerSchema = z
             .record(z.string(), z.unknown(), {
                 message: 'Answer JSON must be a valid object',
             })
-            .optional(),
+            .nullish(),
 
         selectedOptionId: z
             .number({
@@ -128,7 +128,7 @@ export const createCandidateAnswerSchema = z
             .positive({
                 message: 'Selected option id must be a positive number',
             })
-            .optional(),
+            .nullish(),
     })
     .strict()
     .superRefine((value, context) => {
