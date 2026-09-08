@@ -163,9 +163,11 @@ class CandidateService {
         }
     }
 
-    async findCandidate(candidateId: number): Promise<GetCandidateResponse> {
+    async findCandidate(candidateId: string): Promise<GetCandidateResponse> {
         try {
-            const candidate = await this.candidateRepository.findById(candidateId);
+            const candidate = await this.candidateRepository.findOne({
+                public_id: candidateId
+            });
 
             if(!candidate) {
                 throw new NotFoundError('No details found please register yourself');
