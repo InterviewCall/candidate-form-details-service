@@ -177,14 +177,7 @@ export const getCandidateSubmissionParamsSchema = z.object({
 });
 
 export const getCandidateParamsSchema = z.object({
-    candidateId: z.coerce
-        .number({
-            message: 'Candidate id is required',
-        })
-        .int({
-            message: 'Candidate id must be an integer',
-        })
-        .positive({
-            message: 'Candidate id must be a positive number',
-        }),
+    candidateId: z.string().uuid({
+        message: 'Candidate id must be a valid UUID',
+    }),
 });
