@@ -30,7 +30,7 @@ import QualificationForm from './QualificationForm.model';
 import sequelize from './sequelize';
 
 class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, InferCreationAttributes<CandidateSubmission>> {
-    declare id: CreationOptional<number>;
+    declare id: CreationOptional<string>;
     declare publicId: CreationOptional<string>;
     declare candidateId: ForeignKey<Candidate['id']>;
     declare formId: ForeignKey<QualificationForm['id']>;
@@ -89,18 +89,18 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
 
 CandidateSubmission.init({
     id: {
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
+        type: DataTypes.UUID,
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
     },
 
     publicId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-    unique: true,
-    defaultValue: DataTypes.UUIDV4,
-    field: 'public_id',
+        type: DataTypes.UUID,
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
+        field: 'public_id',
     },
 
     candidateId: {
