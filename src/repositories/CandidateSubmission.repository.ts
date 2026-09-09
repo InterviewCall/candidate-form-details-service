@@ -11,15 +11,7 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     async create(data: CreationAttributes<CandidateSubmission>, transaction?: Transaction): Promise<CandidateSubmission> {
         return await this.model.create(data, { transaction });
     }
-    async findById(id: string): Promise<CandidateSubmission | null> {
-        const record = await this.model.findOne({
-            where: {
-                publicId: id
-            }
-        });
-
-        return record;
-    }
+    
 
 
     async markSubmissionAsCompleted(id: string, data: Partial<InferAttributes<CandidateSubmission>>, transaction: Transaction): Promise<void> {
