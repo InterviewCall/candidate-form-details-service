@@ -38,6 +38,16 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
             },
         );
     }
+
+    async findById(id: string): Promise<CandidateSubmission | null> {
+    const record = await this.model.findOne({
+        where: {
+            publicId: id
+        }
+    });
+
+    return record;
+}
 }
 
 export default CandidateSubmissionRepository;
