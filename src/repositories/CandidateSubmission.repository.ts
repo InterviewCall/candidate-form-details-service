@@ -1,6 +1,7 @@
-import { CreationAttributes, InferAttributes, Transaction } from 'sequelize';
+import { CreationAttributes, InferAttributes, Op, Transaction } from 'sequelize';
 
 import CandidateSubmission from '../db/models/CandidateSubmission.model';
+import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 import BaseRepository from './Base.repository';
 
 class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> {
@@ -26,6 +27,23 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         return record;
     }
 
+    async findBookingPendingSubmissionsOlderThan(minutes: number): Promise<CandidateSubmission[]> {
+        const threshold = new Date(Date.now() - minutes * 60 * 1000);
+
+        return await this.model.findAll({
+            where: {
+                status: CandidateSubmissionStatus.BOOKING_PENDING,
+                createdAt: {
+                    [Op.lte]: threshold
+                }
+            },
+            include: [
+                {
+                    association: 'candidate'
+                }
+            ]
+    });
+}
 
     async markSubmissionAsCompleted(id: string, data: Partial<InferAttributes<CandidateSubmission>>, transaction: Transaction): Promise<void> {
         await this.model.update(
@@ -44,6 +62,7 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         );
     }
 
+    
 }
 
 export default CandidateSubmissionRepository;
