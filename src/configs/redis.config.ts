@@ -11,7 +11,7 @@ function createRedisConnection(): Redis {
     const redisConfig = {
         port: serverConfig.REDIS_PORT,
         host: serverConfig.REDIS_HOST,
-        maxRetriesPerRequest: 3
+        maxRetriesPerRequest: null
     };
 
     const redis = new Redis(redisConfig);

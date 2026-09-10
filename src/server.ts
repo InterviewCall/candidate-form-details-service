@@ -1,12 +1,15 @@
 import cors from 'cors';
 import express from 'express';
 
+import './queues/transactionalNotification.worker';
+
 import logger from './configs/logger.config';
 import { frontendConfig, serverConfig } from './configs/server.config';
 import setupAssociations from './db/models/associations';
 import sequelize from './db/models/sequelize';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
 import { appErrorHandler, genericErrorHandler } from './middlewares/error.middleware';
+import { startBookingReminderScheduler } from './queues/bookingReminder.scheduler';
 import apiRouter from './routes';
 
 const app = express();
@@ -31,4 +34,5 @@ app.listen(serverConfig.PORT, async () => {
     logger.info('All the associations are successfully set');
     await sequelize.authenticate();
     logger.info('Database connection has been established successfully', {error: 'new error'});
+    startBookingReminderScheduler();
 });
