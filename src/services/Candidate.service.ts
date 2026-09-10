@@ -17,6 +17,9 @@ import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionSta
 import { LeadTemperature } from '../utils/enums/LeadTemperature';
 import { BadRequestError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 import { FORM_SCORING_QUESTION_KEYS } from '../utils/factories/scoringQuestionKeysFactory';
+import { addReminderDetailsToQueue } from '../producers/transactionalNotification.producer';
+import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
+
 
 class CandidateService {
     private readonly candidateRepository: CandidateRepository;
@@ -245,6 +248,38 @@ class CandidateService {
 
         return LeadTemperature.COLD;
     }
+
+    async sendBookingPendingReminder(): Promise<void> {
+    const submissions =
+        await this.candidateSubmissionRepository.findBookingPendingSubmissionsOlderThan(1); // For testing 1min
+
+    for (const submission of submissions) {
+        if (!submission.candidate) {
+            continue;
+        }
+
+        await addReminderDetailsToQueue({
+            bookingId: null,
+            candidateId: submission.candidate.id,
+            submissionId: submission.publicId,
+            candidateName: submission.candidate.fullName,
+            candidateEmail: submission.candidate.email,
+            candidatePhone: `+91${submission.candidate.phone}`,
+            slotDate: '',
+            slotTime: '',
+            subject: 'Complete Your Slot Booking',
+            notificationType: 'FORM_SUBMITTED_SLOT_NOT_BOOKED_CHECK',
+            templateKeys: {
+                EMAIL: 'SlotBookingReminder',
+                WHATSAPP: 'SlotBookingReminder'
+            },
+            channels: [
+                NotificationChannel.EMAIL
+            ]
+        });
+    }
+}
+
 }
 
 export default CandidateService;

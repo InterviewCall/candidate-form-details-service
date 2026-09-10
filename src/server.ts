@@ -8,6 +8,7 @@ import sequelize from './db/models/sequelize';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
 import { appErrorHandler, genericErrorHandler } from './middlewares/error.middleware';
 import apiRouter from './routes';
+import { startSubmissionReminderCron } from './crons/submissionReminder.cron';
 
 const app = express();
 
@@ -31,4 +32,6 @@ app.listen(serverConfig.PORT, async () => {
     logger.info('All the associations are successfully set');
     await sequelize.authenticate();
     logger.info('Database connection has been established successfully', {error: 'new error'});
+
+    startSubmissionReminderCron();
 });
