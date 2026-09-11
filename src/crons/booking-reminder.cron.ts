@@ -26,7 +26,7 @@ export function bookingReminderCron(): void {
                     candidatePhone: submission.candidate.phone,
                     subject: 'Your InterviewCall booking is still pending',
                     channels: [NotificationChannel.EMAIL],
-                    bookingLink: `http://localhost:3002/readiness/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
+                    bookingLink: `http://localhost:3001/readiness/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
                     templateKeys: {
                         EMAIL: 'BookingReminder',
                         WHATSAPP: 'BookingReminder'
