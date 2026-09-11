@@ -1,6 +1,8 @@
-import { CreationAttributes, InferAttributes, Transaction } from 'sequelize';
+import { CreationAttributes, InferAttributes, Op, Transaction } from 'sequelize';
 
+import Candidate from '../db/models/Candidate.model';
 import CandidateSubmission from '../db/models/CandidateSubmission.model';
+import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 import BaseRepository from './Base.repository';
 
 class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> {
@@ -11,6 +13,7 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     async create(data: CreationAttributes<CandidateSubmission>, transaction?: Transaction): Promise<CandidateSubmission> {
         return await this.model.create(data, { transaction });
     }
+
     async findById(id: string): Promise<CandidateSubmission | null> {
         const record = await this.model.findOne({
             where: {
@@ -42,6 +45,25 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
                 transaction
             },
         );
+    }
+
+    async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
+        const submissions = await this.model.findAll({
+            where: {
+                submittedAt: {
+                    [Op.lte]: cutoffTime
+                },
+                status: CandidateSubmissionStatus.BOOKING_PENDING
+            },
+            include: [{
+                model: Candidate, 
+                as: 'candidate',
+                attributes: ['fullName', 'email', 'phone'],
+                required: true
+            }]
+        });
+
+        return submissions;
     }
 
 }

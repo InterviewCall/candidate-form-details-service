@@ -59,7 +59,7 @@ Candidate.init({
 
     public_id: {
         type: DataTypes.UUID,
-        defaultValue: crypto.randomUUID(),
+        defaultValue: () => crypto.randomUUID(),
         allowNull: false
     },
 

@@ -8,6 +8,7 @@ import CandidateSubmissionRepository from '../repositories/CandidateSubmission.r
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
 import CandidateService from '../services/Candidate.service';
+import CandidateSubmissionService from '../services/CandidateSubmission.service';
 import { CreateCandidateResponse, CreateSubmissionResponse, GetCandidateResponse, GetCandidateSubmissionResponse } from '../types/Response.type';
 import { buildSuccessResponse } from '../utils/helpers/response.helper';
 
@@ -17,6 +18,10 @@ const candidateService = new CandidateService(
     new CandidateAnswerRepository(),
     new QualificationFormRepository(),
     new FormQuestionOptionRepository()
+);
+
+const candidateSubmissionService = new CandidateSubmissionService(
+    new CandidateSubmissionRepository()
 );
 
 async function createCadidateHandler(req: Request, res: Response, next: NextFunction) {
@@ -71,9 +76,22 @@ async function getCandidateHandler(req: Request, res: Response, next: NextFuncti
     }
 }
 
+async function getAllCandidatesWhereBookingPending(_req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await candidateSubmissionService.findAllCandidatesWhereBookingPending();
+        res.status(StatusCodes.OK).json(
+            buildSuccessResponse('Candidate fetched successfully', response)
+        );
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 export default {
     createCadidateHandler,
     createCandidateSubmissionHandler,
     getCandidateSubmissionHandler,
-    getCandidateHandler
+    getCandidateHandler,
+    getAllCandidatesWhereBookingPending
 };
