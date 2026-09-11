@@ -204,7 +204,8 @@ class CandidateService {
 
             return {
                 submissionId: candidateSubmission.publicId,
-                candidateId: candidateSubmission.candidateId
+                candidateId: candidateSubmission.candidateId,
+                candidatePublicId: candidateSubmission.candidate!.public_id
             };
         } catch (error) {
             logger.error('Submission api error', error);

@@ -66,6 +66,7 @@ export type CreateSubmissionResponse = {
 export type GetCandidateSubmissionResponse = {
     submissionId: string,
     candidateId: number
+    candidatePublicId: string
 }
 
 export type GetCandidateResponse = {
