@@ -6,6 +6,11 @@ import { createCandidateSubmissionParamsSchema, createCandidateSubmissionSchema,
 
 const submissionRouter = Router();
 
+submissionRouter.get(
+    '/pending-submissions',
+    candidateController.getAllCandidatesWhereBookingPending
+);
+
 submissionRouter.put(
     '/:submissionId',
     validateRequestParams(createCandidateSubmissionParamsSchema),
