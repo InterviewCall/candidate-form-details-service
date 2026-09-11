@@ -4,6 +4,7 @@ import { addBookingReminderDetailsToQueue } from '../producers/reminderNotificat
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import CandidateSubmissionService from '../services/CandidateSubmission.service';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
+import { getBookingLink } from '../utils/helpers/getBookingLink';
 
 const candidateSubmissionService = new CandidateSubmissionService(
     new CandidateSubmissionRepository()
@@ -26,7 +27,7 @@ export function bookingReminderCron(): void {
                     candidatePhone: submission.candidate.phone,
                     subject: 'Your InterviewCall booking is still pending',
                     channels: [NotificationChannel.EMAIL],
-                    bookingLink: `http://localhost:3002/readiness/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
+                    bookingLink: getBookingLink( submission.formSlug, submission.publicId ),
                     templateKeys: {
                         EMAIL: 'BookingReminder',
                         WHATSAPP: 'BookingReminder'
