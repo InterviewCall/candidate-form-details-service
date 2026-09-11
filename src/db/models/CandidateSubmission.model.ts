@@ -49,6 +49,8 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
     declare leadScore: CreationOptional<number | null>;
     declare leadTemperature: CreationOptional<LeadTemperature | null>;
     declare submittedAt: CreationOptional<Date | null>;
+    declare reminderCount: CreationOptional<number>;
+    declare lastReminderAt: CreationOptional<Date | null>;
 
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
@@ -89,18 +91,18 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
 
 CandidateSubmission.init({
     id: {
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
+        type: DataTypes.BIGINT.UNSIGNED,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
     },
 
     publicId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-    unique: true,
-    defaultValue: DataTypes.UUIDV4,
-    field: 'public_id',
+        type: DataTypes.UUID,
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
+        field: 'public_id',
     },
 
     candidateId: {
@@ -196,6 +198,18 @@ CandidateSubmission.init({
     },
 
     submittedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+    },
+
+    reminderCount: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        defaultValue: 0,
+    },
+
+    lastReminderAt: {
         type: DataTypes.DATE,
         allowNull: true,
         defaultValue: null,

@@ -20,6 +20,13 @@ class CandidateSubmissionService {
 
         await this.candidateSubmissionRepository.markSubmissionAsBooked(submissionId);
     }
+    async updateReminderDetails(id: string,reminderCount: number,reminderTime: Date): Promise<boolean> {
+        return await this.candidateSubmissionRepository.updateReminderDetails(
+            id,
+            reminderCount,
+            reminderTime
+        );
+    }
 }
 
 export default CandidateSubmissionService;

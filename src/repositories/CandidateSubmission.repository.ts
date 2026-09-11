@@ -62,10 +62,26 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
             where: {
-                submittedAt: {
-                    [Op.lte]: cutoffTime
+                status: CandidateSubmissionStatus.BOOKING_PENDING,
+                reminderCount: {
+                    [Op.lt]: 3
                 },
-                status: CandidateSubmissionStatus.BOOKING_PENDING
+                [Op.or]: [
+                    {
+                        reminderCount: 0,
+                        submittedAt: {
+                            [Op.lte]: cutoffTime
+                        }
+                    },
+                    {
+                        reminderCount: {
+                            [Op.gt]: 0
+                        },
+                        lastReminderAt: {
+                            [Op.lte]: cutoffTime
+                        }
+                    }
+                ]
             },
             include: [{
                 model: Candidate, 
@@ -76,6 +92,27 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         });
 
         return submissions;
+    }
+    async updateReminderDetails(
+        id: string,
+        reminderCount: number,
+        reminderTime: Date
+    ): Promise<boolean> {
+        const [updatedRows] = await this.model.update(
+            {
+                reminderCount: reminderCount + 1,
+                lastReminderAt: reminderTime
+            },
+            {
+                where: {
+                    publicId: id,
+                    status: CandidateSubmissionStatus.BOOKING_PENDING,
+                    reminderCount
+                }
+            }
+        );
+
+        return updatedRows > 0;
     }
 
 }

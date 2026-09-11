@@ -10,7 +10,7 @@ const candidateSubmissionService = new CandidateSubmissionService(
 );
 
 export function bookingReminderCron(): void {
-    cron.schedule('*/2 * * * * ', async () => {
+    cron.schedule('* * * * * ', async () => {
         const pendingBookings = await candidateSubmissionService.findAllCandidatesWhereBookingPending();
 
         if(pendingBookings.length > 0) {
@@ -18,8 +18,20 @@ export function bookingReminderCron(): void {
                 if(!submission.candidate) {
                     continue;
                 }
+                const reminderTime = new Date();
+
+                const reminderUpdated = await candidateSubmissionService.updateReminderDetails(
+                    submission.publicId,
+                    submission.reminderCount,
+                    reminderTime
+                );
+
+                if(!reminderUpdated) {
+                    continue;
+                }
                 await addBookingReminderDetailsToQueue({
                     submissionId: submission.publicId,
+                    reminderNumber: submission.reminderCount + 1,
                     candidateId: submission.candidateId,
                     candidateName: submission.candidate.fullName,
                     candidateEmail: submission.candidate.email,
