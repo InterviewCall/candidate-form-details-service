@@ -1,4 +1,4 @@
-import { Transaction } from 'sequelize';
+import sequelize from '../db/models/sequelize';
 import CandidateSubmission from '../db/models/CandidateSubmission.model';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import { NotFoundError } from '../utils/errors/app.error';
@@ -21,11 +21,13 @@ class CandidateSubmissionService {
 
         await this.candidateSubmissionRepository.markSubmissionAsBooked(submissionId);
     }
-    async updateReminderDetails(id: string,transaction: Transaction): Promise<boolean> {
-        return await this.candidateSubmissionRepository.updateReminderDetails(
-            id,
-            transaction
-        );
+    async updateReminderDetails(submissionId: string): Promise<void> {
+        await sequelize.transaction(async (transaction) => {
+            await this.candidateSubmissionRepository.updateReminderDetails(
+                submissionId,
+                transaction
+            );
+        });
     }
 }
 

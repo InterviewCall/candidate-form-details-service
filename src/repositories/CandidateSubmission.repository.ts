@@ -82,7 +82,7 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     }
     async updateReminderDetails(
         id: string,
-        transaction: Transaction
+        transaction?: Transaction
     ): Promise<boolean> {
         const [updatedRows] = await this.model.increment(
             'reminderCount',
