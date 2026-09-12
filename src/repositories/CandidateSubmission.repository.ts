@@ -46,14 +46,29 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
             },
         );
     }
+    async markSubmissionAsBooked(id: string): Promise<void> {
+        await this.model.update(
+            {
+                status: CandidateSubmissionStatus.BOOKED
+            },
+            {
+                where: {
+                    publicId: id
+                }
+            },
+        );
+    }
 
     async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
             where: {
+                status: CandidateSubmissionStatus.BOOKING_PENDING,
+                reminderCount: {
+                    [Op.lt]: 3
+                },
                 submittedAt: {
                     [Op.lte]: cutoffTime
-                },
-                status: CandidateSubmissionStatus.BOOKING_PENDING
+                }
             },
             include: [{
                 model: Candidate, 
@@ -64,6 +79,23 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         });
 
         return submissions;
+    }
+    async updateReminderDetails(
+        id: string,
+        transaction?: Transaction
+    ): Promise<boolean> {
+        const [updatedRows] = await this.model.increment(
+            'reminderCount',
+            {
+                by: 1,
+                where: {
+                    publicId: id,
+                },
+                transaction
+            }
+        );
+
+        return updatedRows.length > 0;
     }
 
 }

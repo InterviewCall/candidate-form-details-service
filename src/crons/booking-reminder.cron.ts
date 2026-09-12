@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-
+import { getBookingLink } from '../utils/helpers/getBookingLink';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import CandidateSubmissionService from '../services/CandidateSubmission.service';
@@ -10,7 +10,7 @@ const candidateSubmissionService = new CandidateSubmissionService(
 );
 
 export function bookingReminderCron(): void {
-    cron.schedule('*/2 * * * * ', async () => {
+    cron.schedule('* * * * * ', async () => {
         const pendingBookings = await candidateSubmissionService.findAllCandidatesWhereBookingPending();
 
         if(pendingBookings.length > 0) {
@@ -18,15 +18,24 @@ export function bookingReminderCron(): void {
                 if(!submission.candidate) {
                     continue;
                 }
+                
+
+                await candidateSubmissionService.updateReminderDetails(
+                    submission.publicId
+                );
+                    
+
                 await addBookingReminderDetailsToQueue({
                     submissionId: submission.publicId,
+                    reminderNumber: submission.reminderCount + 1,
                     candidateId: submission.candidateId,
                     candidateName: submission.candidate.fullName,
                     candidateEmail: submission.candidate.email,
                     candidatePhone: submission.candidate.phone,
                     subject: 'Your InterviewCall booking is still pending',
                     channels: [NotificationChannel.EMAIL],
-                    bookingLink: `http://localhost:3002/readiness/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
+                    bookingLink: getBookingLink( submission.formSlug, submission.publicId ),
+
                     templateKeys: {
                         EMAIL: 'BookingReminder',
                         WHATSAPP: 'BookingReminder'
