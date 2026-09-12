@@ -1,3 +1,4 @@
+import { Transaction } from 'sequelize';
 import CandidateSubmission from '../db/models/CandidateSubmission.model';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import { NotFoundError } from '../utils/errors/app.error';
@@ -8,7 +9,7 @@ class CandidateSubmissionService {
     async findAllCandidatesWhereBookingPending(): Promise<CandidateSubmission[]> {
         const cutoffTime = new Date(Date.now() - 1 * 60 * 1000);
         const submissions = await this.candidateSubmissionRepository.findAllBookingPendingSubmisssions(cutoffTime);
-    
+
         return submissions;
     }
     async markSubmissionAsBooked(submissionId: string): Promise<void> {
@@ -20,11 +21,10 @@ class CandidateSubmissionService {
 
         await this.candidateSubmissionRepository.markSubmissionAsBooked(submissionId);
     }
-    async updateReminderDetails(id: string,reminderCount: number,reminderTime: Date): Promise<boolean> {
+    async updateReminderDetails(id: string,transaction: Transaction): Promise<boolean> {
         return await this.candidateSubmissionRepository.updateReminderDetails(
             id,
-            reminderCount,
-            reminderTime
+            transaction
         );
     }
 }

@@ -50,7 +50,6 @@ class CandidateSubmission extends Model<InferAttributes<CandidateSubmission>, In
     declare leadTemperature: CreationOptional<LeadTemperature | null>;
     declare submittedAt: CreationOptional<Date | null>;
     declare reminderCount: CreationOptional<number>;
-    declare lastReminderAt: CreationOptional<Date | null>;
 
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
@@ -209,11 +208,6 @@ CandidateSubmission.init({
         defaultValue: 0,
     },
 
-    lastReminderAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null,
-    },
 
     createdAt: {
         type: DataTypes.DATE,

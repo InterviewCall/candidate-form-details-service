@@ -66,22 +66,9 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
                 reminderCount: {
                     [Op.lt]: 3
                 },
-                [Op.or]: [
-                    {
-                        reminderCount: 0,
-                        submittedAt: {
-                            [Op.lte]: cutoffTime
-                        }
-                    },
-                    {
-                        reminderCount: {
-                            [Op.gt]: 0
-                        },
-                        lastReminderAt: {
-                            [Op.lte]: cutoffTime
-                        }
-                    }
-                ]
+                submittedAt: {
+                    [Op.lte]: cutoffTime
+                }
             },
             include: [{
                 model: Candidate, 
@@ -95,24 +82,20 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     }
     async updateReminderDetails(
         id: string,
-        reminderCount: number,
-        reminderTime: Date
+        transaction: Transaction
     ): Promise<boolean> {
-        const [updatedRows] = await this.model.update(
+        const [updatedRows] = await this.model.increment(
+            'reminderCount',
             {
-                reminderCount: reminderCount + 1,
-                lastReminderAt: reminderTime
-            },
-            {
+                by: 1,
                 where: {
                     publicId: id,
-                    status: CandidateSubmissionStatus.BOOKING_PENDING,
-                    reminderCount
-                }
+                },
+                transaction
             }
         );
 
-        return updatedRows > 0;
+        return updatedRows.length > 0;
     }
 
 }
