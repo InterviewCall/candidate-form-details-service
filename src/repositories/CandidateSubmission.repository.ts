@@ -53,6 +53,9 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
                 submittedAt: {
                     [Op.lte]: cutoffTime
                 },
+                reminderCount: {
+                    [Op.lt]: 3
+                },
                 status: CandidateSubmissionStatus.BOOKING_PENDING
             },
             include: [{
@@ -64,6 +67,16 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         });
 
         return submissions;
+    }
+
+    async increaseReminderCount(submissionId: string, transaction: Transaction) {
+        await this.model.increment('reminderCount', {
+            where: {
+                publicId: submissionId
+            },
+            by: 1,
+            transaction
+        });
     }
 
 }
