@@ -31,13 +31,14 @@ class CandidateSubmissionService {
 
                     await addBookingReminderDetailsToQueue({
                         submissionId: submission.publicId,
+                        reminderNumber:submission.reminderCount+1,
                         candidateId: submission.candidateId,
                         candidateName: submission.candidate.fullName,
                         candidateEmail: submission.candidate.email,
                         candidatePhone: submission.candidate.phone,
                         subject: 'Your InterviewCall booking is still pending',
                         channels: [NotificationChannel.EMAIL],
-                        bookingLink: getBookingLink(submission.landingPage!, submission.publicId),
+                        bookingLink: getBookingLink(submission.formSlug, submission.publicId),
                         templateKeys: {
                             EMAIL: 'BookingReminder',
                             WHATSAPP: 'BookingReminder'
