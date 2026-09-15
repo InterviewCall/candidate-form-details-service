@@ -4,7 +4,7 @@ import sequelize from '../db/models/sequelize';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
-import { getBookingLink } from '../utils/helpers/getBookingLink';
+
 
 class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
@@ -17,7 +17,7 @@ class CandidateSubmissionService {
     }
 
     async sendReminderNotificationForPendingBookings() {
-        const cutoffTime = new Date(Date.now() - 10 * 60 * 1000);
+        const cutoffTime = new Date(Date.now() - 1 * 60 * 1000);
         const pendingBookingSubmissions: CandidateSubmission[] = await this.candidateSubmissionRepository.findAllBookingPendingSubmisssions(cutoffTime);
 
         if(pendingBookingSubmissions.length > 0) {
@@ -39,7 +39,7 @@ class CandidateSubmissionService {
                         subject: 'Your InterviewCall booking is still pending',
                         channels: [NotificationChannel.EMAIL],
 
-                        bookingLink: getBookingLink( submission.formSlug, submission.publicId ),
+                        bookingLink: `http://localhost:3001/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
 
                         templateKeys: {
                             EMAIL: 'BookingReminder',
