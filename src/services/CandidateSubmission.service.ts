@@ -4,7 +4,7 @@ import sequelize from '../db/models/sequelize';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
-
+import { getBookingLink } from '../utils/helpers/getBookingLink';
 class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
 
@@ -31,13 +31,14 @@ class CandidateSubmissionService {
 
                     await addBookingReminderDetailsToQueue({
                         submissionId: submission.publicId,
+                        reminderNumber:submission.reminderCount+1,
                         candidateId: submission.candidateId,
                         candidateName: submission.candidate.fullName,
                         candidateEmail: submission.candidate.email,
                         candidatePhone: submission.candidate.phone,
                         subject: 'Your InterviewCall booking is still pending',
                         channels: [NotificationChannel.EMAIL],
-                        bookingLink: `http://localhost:3002/readiness/${submission.formSlug}/book-strategy-call?submission-id=${submission.publicId}`,
+                        bookingLink: getBookingLink(submission.formSlug, submission.publicId),
                         templateKeys: {
                             EMAIL: 'BookingReminder',
                             WHATSAPP: 'BookingReminder'
