@@ -9,7 +9,7 @@ class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
 
     async findAllCandidatesWhereBookingPending(): Promise<CandidateSubmission[]> {
-        const cutoffTime = new Date(Date.now() - 1 * 60 * 1000);
+        const cutoffTime = new Date(Date.now() - 10 * 60 * 1000);
         const submissions = await this.candidateSubmissionRepository.findAllBookingPendingSubmisssions(cutoffTime);
     
         return submissions;
