@@ -3,8 +3,8 @@ import CandidateSubmission from '../db/models/CandidateSubmission.model';
 import sequelize from '../db/models/sequelize';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
-import { NotFoundError } from '../utils/errors/app.error';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
+import { NotFoundError } from '../utils/errors/app.error';
 import { getBookingLink } from '../utils/helpers/getBookingLink';
 
 class CandidateSubmissionService {
