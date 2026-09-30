@@ -3,10 +3,9 @@ import CandidateSubmission from '../db/models/CandidateSubmission.model';
 import sequelize from '../db/models/sequelize';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
-import { NotFoundError, BadRequestError } from '../utils/errors/app.error';
+import { NotFoundError } from '../utils/errors/app.error';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
 import { getBookingLink } from '../utils/helpers/getBookingLink';
-import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 
 class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
@@ -66,10 +65,6 @@ class CandidateSubmissionService {
                 `No candidate submission found with id: ${submissionId}`
             );
         }
-        if(submission.status === CandidateSubmissionStatus.BOOKED) {
-            throw new BadRequestError('This submission already has a slot booked. Please submit the form again before booking a new slot.');
-        }
-
         await this.candidateSubmissionRepository.markSubmissionAsBooked(
             submissionId
         );
