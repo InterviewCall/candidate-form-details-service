@@ -6,13 +6,14 @@ import QualificationForm from '../models/QualificationForm.model';
 import sequelize from '../models/sequelize';
 import { QuestionType } from '../../utils/enums/QuestionType';
 
-const FORM_SLUG = 'job-switch';
+const FORM_SLUG = 'ai-fear';
 
 const steps = [
   {
     stepNo: 1,
     title: 'Where are you currently in your engineering career?',
-    helperText: 'This helps us understand your current role and experience level.',
+    helperText:
+      'This helps us understand your current role and experience level.',
     questions: [
       {
         questionKey: 'company',
@@ -47,7 +48,7 @@ const steps = [
           {
             optionLabel: '1–2 years',
             optionValue: '1-2',
-            score: 12,
+            score: 10,
             sortOrder: 2,
           },
           {
@@ -75,50 +76,45 @@ const steps = [
 
   {
     stepNo: 2,
-    title: 'What best describes your current job-search situation?',
-    helperText: 'Choose the option closest to your current situation.',
+    title:
+      'How worried are you about AI affecting your software engineering role?',
+    helperText:
+      'Choose the option that best describes your current concern.',
     questions: [
       {
-        questionKey: 'jobSearchSituation',
-        questionText: 'What best describes your current job-search situation?',
+        questionKey: 'aiConcern',
+        questionText:
+          'How worried are you about AI affecting your software engineering role?',
         questionType: QuestionType.RADIO,
         isRequired: true,
         sortOrder: 1,
         options: [
           {
             optionLabel:
-              'I am applying but not getting enough interview calls',
-            optionValue: 'applying_no_calls',
+              'Very worried — I feel my current work may become replaceable',
+            optionValue: 'very_worried_replaceable',
             score: 20,
             sortOrder: 1,
           },
           {
             optionLabel:
-              'I am getting calls but not clearing interviews',
-            optionValue: 'getting_calls_not_clearing',
-            score: 20,
+              'Somewhat worried — I know I need to upskill',
+            optionValue: 'somewhat_worried_upskill',
+            score: 16,
             sortOrder: 2,
           },
           {
             optionLabel:
-              'I am not sure which companies or roles to target',
-            optionValue: 'unclear_target',
+              'Not worried, but I want to stay ahead',
+            optionValue: 'not_worried_stay_ahead',
             score: 12,
             sortOrder: 3,
           },
           {
-            optionLabel:
-              'I have not started applying yet but want to switch soon',
-            optionValue: 'not_started',
-            score: 14,
+            optionLabel: 'I am not sure yet',
+            optionValue: 'not_sure_yet',
+            score: 5,
             sortOrder: 4,
-          },
-          {
-            optionLabel:
-              'I am applying randomly without a clear strategy',
-            optionValue: 'random_applying',
-            score: 16,
-            sortOrder: 5,
           },
         ],
       },
@@ -129,12 +125,12 @@ const steps = [
     stepNo: 3,
     title: 'What is your current and target CTC?',
     helperText:
-      'This helps us understand your current value band and growth target.',
+      'This helps us understand your current growth stage.',
     questions: [
       {
         questionKey: 'currentCtc',
         questionText: 'Current CTC',
-        placeholder: 'Select your current CTC',
+        placeholder: 'Select current CTC',
         questionType: QuestionType.SELECT,
         isRequired: true,
         sortOrder: 1,
@@ -169,7 +165,7 @@ const steps = [
       {
         questionKey: 'targetCtc',
         questionText: 'Target CTC',
-        placeholder: 'Select your target CTC',
+        placeholder: 'Select target CTC',
         questionType: QuestionType.SELECT,
         isRequired: true,
         sortOrder: 2,
@@ -177,25 +173,25 @@ const steps = [
           {
             optionLabel: '₹10–20 LPA',
             optionValue: '10-20_lpa',
-            score: 5,
+            score: 0,
             sortOrder: 1,
           },
           {
             optionLabel: '₹20–30 LPA',
             optionValue: '20-30_lpa',
-            score: 10,
+            score: 0,
             sortOrder: 2,
           },
           {
             optionLabel: '₹30–50 LPA',
             optionValue: '30-50_lpa',
-            score: 15,
+            score: 0,
             sortOrder: 3,
           },
           {
             optionLabel: '₹50 LPA+',
             optionValue: '50_plus_lpa',
-            score: 20,
+            score: 0,
             sortOrder: 4,
           },
         ],
@@ -205,53 +201,47 @@ const steps = [
 
   {
     stepNo: 4,
-    title: 'What do you feel is your biggest preparation gap?',
+    title: 'What do you feel is your biggest gap right now?',
     helperText:
-      'This helps us identify the capability gap affecting your interviews.',
+      'For AI-era readiness, this helps us identify where you need the most work.',
     questions: [
       {
         questionKey: 'mainGap',
         questionText:
-          'What do you feel is your biggest preparation gap?',
+          'What do you feel is your biggest gap right now?',
         questionType: QuestionType.RADIO,
         isRequired: true,
         sortOrder: 1,
         options: [
           {
-            optionLabel: 'DSA',
-            optionValue: 'dsa',
-            score: 15,
+            optionLabel: 'AI-assisted engineering skills',
+            optionValue: 'ai_assisted_engineering',
+            score: 0,
             sortOrder: 1,
           },
           {
-            optionLabel: 'System design',
-            optionValue: 'system_design',
-            score: 16,
+            optionLabel: 'System design and architecture',
+            optionValue: 'system_design_architecture',
+            score: 0,
             sortOrder: 2,
           },
           {
-            optionLabel: 'Projects/profile',
-            optionValue: 'projects_profile',
-            score: 14,
+            optionLabel: 'DSA and problem solving',
+            optionValue: 'dsa_problem_solving',
+            score: 0,
             sortOrder: 3,
           },
           {
-            optionLabel: 'Interview communication',
-            optionValue: 'interview_communication',
-            score: 13,
+            optionLabel: 'Real-world software engineering depth',
+            optionValue: 'real_world_engineering_depth',
+            score: 0,
             sortOrder: 4,
           },
           {
-            optionLabel: 'AI-assisted engineering skills',
-            optionValue: 'ai_assisted_engineering',
-            score: 12,
+            optionLabel: 'Interview confidence and communication',
+            optionValue: 'interview_confidence_communication',
+            score: 0,
             sortOrder: 5,
-          },
-          {
-            optionLabel: 'No clear structure',
-            optionValue: 'no_clear_structure',
-            score: 15,
-            sortOrder: 6,
           },
         ],
       },
@@ -260,45 +250,48 @@ const steps = [
 
   {
     stepNo: 5,
-    title: 'What type of role are you targeting?',
+    title: 'What best describes your current career situation?',
     helperText:
-      'This helps us understand the direction of your job switch.',
+      'This helps us understand the urgency behind your interest.',
     questions: [
       {
-        questionKey: 'targetRoleType',
-        questionText: 'What type of role are you targeting?',
+        questionKey: 'careerSituation',
+        questionText:
+          'What best describes your current career situation?',
         questionType: QuestionType.RADIO,
         isRequired: true,
         sortOrder: 1,
         options: [
           {
-            optionLabel: 'Product software role',
-            optionValue: 'product_software',
-            score: 12,
+            optionLabel:
+              'I am worried AI will reduce opportunities',
+            optionValue: 'ai_reduce_opportunities',
+            score: 18,
             sortOrder: 1,
           },
           {
-            optionLabel: 'Backend role',
-            optionValue: 'backend',
-            score: 10,
+            optionLabel: 'My current work feels repetitive',
+            optionValue: 'current_work_repetitive',
+            score: 15,
             sortOrder: 2,
           },
           {
-            optionLabel: 'Fullstack role',
-            optionValue: 'fullstack',
-            score: 10,
+            optionLabel: 'I do not know what to learn next',
+            optionValue: 'dont_know_what_to_learn',
+            score: 12,
             sortOrder: 3,
           },
           {
-            optionLabel: 'AI-native role',
-            optionValue: 'ai_native',
-            score: 12,
+            optionLabel: 'I want to switch to better roles',
+            optionValue: 'switch_to_better_roles',
+            score: 18,
             sortOrder: 4,
           },
           {
-            optionLabel: 'Not sure',
-            optionValue: 'not_sure',
-            score: 4,
+            optionLabel:
+              'I want to become more valuable in my current company',
+            optionValue: 'more_valuable_current_company',
+            score: 14,
             sortOrder: 5,
           },
         ],
@@ -308,14 +301,14 @@ const steps = [
 
   {
     stepNo: 6,
-    title: 'How soon do you want to seriously work on your switch?',
+    title: 'How soon do you want to seriously work on this?',
     helperText:
       'This helps us prioritize serious candidates for strategy calls.',
     questions: [
       {
         questionKey: 'urgency',
         questionText:
-          'How soon do you want to seriously work on your switch?',
+          'How soon do you want to seriously work on this?',
         questionType: QuestionType.RADIO,
         isRequired: true,
         sortOrder: 1,
@@ -339,7 +332,7 @@ const steps = [
             sortOrder: 3,
           },
           {
-            optionLabel: 'Just exploring',
+            optionLabel: 'Just exploring right now',
             optionValue: 'just_exploring',
             score: 0,
             sortOrder: 4,
@@ -378,14 +371,14 @@ const steps = [
             sortOrder: 2,
           },
           {
-            optionLabel: 'Not sure',
-            optionValue: 'not_sure',
+            optionLabel: 'Not sure yet',
+            optionValue: 'not_sure_yet',
             score: 5,
             sortOrder: 3,
           },
           {
-            optionLabel: 'No',
-            optionValue: 'no',
+            optionLabel: 'No, I cannot invest right now',
+            optionValue: 'cannot_invest',
             score: 0,
             sortOrder: 4,
           },
@@ -394,9 +387,9 @@ const steps = [
 
       {
         questionKey: 'notes',
-        questionText: 'Anything else you want us to know?',
+        questionText: 'Anything else we should know?',
         placeholder:
-          'Tell us anything about your job-switch situation, goals, or challenges...',
+          'Example: I am a backend developer with 3 years of experience, but I feel my current work is repetitive and I am worried about AI...',
         questionType: QuestionType.TEXTAREA,
         isRequired: false,
         sortOrder: 2,
@@ -413,14 +406,14 @@ export default {
       const [form] = await QualificationForm.findOrCreate({
         where: { slug: FORM_SLUG },
         defaults: {
-          name: 'Product Company Readiness Check',
+          name: 'AI-Proof Engineer Readiness Check',
           slug: FORM_SLUG,
-          segmentKey: 'job_switch',
+          segmentKey: 'ai_fear',
           title:
-            'Let’s check what may be stopping you from getting better interview calls.',
-          subTitle: 'Product Company Readiness Check',
+            'Let’s check whether your current skillset is strong enough for the AI era.',
+          subTitle: 'AI-Proof Engineer Readiness Check',
           description:
-            'Answer a few questions so our team can understand your current job-switch situation, preparation gaps, and whether the AI-Proof Engineer Program is the right fit for you.',
+            'Answer a few questions so our team can understand your current engineering stage, AI-readiness, and whether the AI-Proof Engineer Program is the right fit for you.',
           version: 1,
           isActive: true,
         },

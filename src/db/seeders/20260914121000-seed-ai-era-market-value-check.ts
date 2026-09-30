@@ -6,7 +6,7 @@ import QualificationForm from '../models/QualificationForm.model';
 import sequelize from '../models/sequelize';
 import { QuestionType } from '../../utils/enums/QuestionType';
 
-const FORM_SLUG = 'ai-era-market-value-check';
+const FORM_SLUG = 'salary-stagnation';
 
 const steps = [
   {
