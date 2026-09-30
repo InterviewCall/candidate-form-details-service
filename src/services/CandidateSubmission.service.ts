@@ -3,10 +3,10 @@ import CandidateSubmission from '../db/models/CandidateSubmission.model';
 import sequelize from '../db/models/sequelize';
 import { addBookingReminderDetailsToQueue } from '../producers/reminderNotification.producer';
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
-import { getBookingLink } from '../utils/helpers/getBookingLink.helper';
-import { BadRequestError, NotFoundError } from '../utils/errors/app.error';
-import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
+import { NotFoundError, BadRequestError } from '../utils/errors/app.error';
 import { NotificationChannel } from '../utils/enums/NotificationChannel.enum';
+import { getBookingLink } from '../utils/helpers/getBookingLink';
+import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 
 class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
