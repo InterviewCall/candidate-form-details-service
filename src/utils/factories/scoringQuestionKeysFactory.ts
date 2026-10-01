@@ -1,22 +1,20 @@
 export const FORM_SCORING_QUESTION_KEYS: Record<string, string[]> = {
-    'job-switch': [
+    'ai-fear': [
         'yoe',
-        'jobSearchSituation',
         'currentCtc',
-        'targetCtc',
-        'mainGap',
-        'targetRoleType',
+        'aiConcern',
+        'careerSituation',
         'urgency',
         'investmentReadiness',
     ],
 
-    'ai-fear': [
+    'job-switch': [
         'yoe',
-        'aiConcern',
         'currentCtc',
+        'jobSearchSituation',
         'targetCtc',
         'mainGap',
-        'careerSituation',
+        'targetRoleType',
         'urgency',
         'investmentReadiness',
     ],
