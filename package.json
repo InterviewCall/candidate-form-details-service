@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "build": "rm -rf dist && tsc",
+    "start": "node dist/server.js",
+    "start:ts": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts",
     "migration:generate": "sequelize-cli migration:generate --name",
     "migrate": "sequelize-cli db:migrate",
-    "rollback": "sequelize-cli db:migrate:undo"
+    "rollback": "sequelize-cli db:migrate:undo",
+    "migrate:prod": "SEQUELIZE_USE_DIST=true sequelize-cli db:migrate",
+    "rollback:prod": "SEQUELIZE_USE_DIST=true sequelize-cli db:migrate:undo"
   },
   "keywords": [],
   "author": "",
@@ -18,12 +22,14 @@
     "cors": "^2.8.6",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.7.0",
     "http-status-codes": "^2.3.0",
     "ioredis": "^5.10.1",
     "mysql2": "^3.22.3",
     "node-cron": "^4.6.0",
     "redis": "^6.2.1",
     "sequelize": "^6.37.8",
+    "sequelize-cli": "^6.6.5",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
@@ -39,7 +45,6 @@
     "eslint": "^9.28.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "nodemon": "^3.1.10",
-    "sequelize-cli": "^6.6.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
