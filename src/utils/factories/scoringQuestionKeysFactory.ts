@@ -1,13 +1,4 @@
 export const FORM_SCORING_QUESTION_KEYS: Record<string, string[]> = {
-    'ai-fear': [
-        'yoe',
-        'currentCtc',
-        'aiConcern',
-        'currentCareerSituation',
-        'urgency',
-        'investmentReadiness',
-    ],
-
     'job-switch': [
         'yoe',
         'currentCtc',
@@ -18,12 +9,22 @@ export const FORM_SCORING_QUESTION_KEYS: Record<string, string[]> = {
         'investmentReadiness',
     ],
 
-    'salary-stangnation': [
+    'salary-stagnation': [
         'yoe',
+        'growthSituation',
         'currentCtc',
         'mainGap',
         'growthTarget',
         'urgency',
         'investmentReadiness',
-    ]
+    ],
+
+    'ai-fear': [
+        'yoe',
+        'currentCtc',
+        'aiConcern',
+        'careerSituation',
+        'urgency',
+        'investmentReadiness',
+    ],
 };
