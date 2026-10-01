@@ -12,8 +12,9 @@ const FORM_SLUG = 'job-switch';
 const steps = [
     {
         stepNo: 1,
-        title: 'Where are you currently in your engineering career?',
-        helperText: 'This helps us understand your current role and experience level.',
+        title: 'Where are you currently in your software engineering career?',
+        helperText:
+            'This helps us understand your current role and experience level.',
         questions: [
             {
                 questionKey: 'company',
@@ -26,7 +27,8 @@ const steps = [
             {
                 questionKey: 'role',
                 questionText: 'Current Role',
-                placeholder: 'Example: Software Engineer, Backend Developer',
+                placeholder:
+                    'Example: Software Engineer, Backend Developer',
                 questionType: QuestionType.TEXT,
                 isRequired: true,
                 sortOrder: 2,
@@ -76,47 +78,49 @@ const steps = [
 
     {
         stepNo: 2,
-        title: 'What best describes your current job-search situation?',
-        helperText: 'Choose the option closest to your current situation.',
+        title: 'What is happening in your job search right now?',
+        helperText:
+            'Choose the option that best describes your current situation.',
         questions: [
             {
                 questionKey: 'jobSearchSituation',
-                questionText: 'What best describes your current job-search situation?',
+                questionText:
+                    'What is happening in your job search right now?',
                 questionType: QuestionType.RADIO,
                 isRequired: true,
                 sortOrder: 1,
                 options: [
                     {
                         optionLabel:
-              'I am applying but not getting enough interview calls',
+                            'I am applying but not getting enough interview calls',
                         optionValue: 'applying_no_calls',
                         score: 20,
                         sortOrder: 1,
                     },
                     {
                         optionLabel:
-              'I am getting calls but not clearing interviews',
+                            'I am getting calls but not clearing interviews',
                         optionValue: 'getting_calls_not_clearing',
                         score: 20,
                         sortOrder: 2,
                     },
                     {
                         optionLabel:
-              'I am not sure which companies or roles to target',
+                            'I am not sure which companies or roles to target',
                         optionValue: 'unclear_target',
                         score: 12,
                         sortOrder: 3,
                     },
                     {
                         optionLabel:
-              'I have not started applying yet but want to switch soon',
+                            'I have not started applying yet but want to switch soon',
                         optionValue: 'not_started',
                         score: 14,
                         sortOrder: 4,
                     },
                     {
                         optionLabel:
-              'I am applying randomly without a clear strategy',
+                            'I am applying randomly without a clear strategy',
                         optionValue: 'random_applying',
                         score: 16,
                         sortOrder: 5,
@@ -130,12 +134,12 @@ const steps = [
         stepNo: 3,
         title: 'What is your current and target CTC?',
         helperText:
-      'This helps us understand your current value band and growth target.',
+            'This helps us understand your current growth and switch target.',
         questions: [
             {
                 questionKey: 'currentCtc',
                 questionText: 'Current CTC',
-                placeholder: 'Select your current CTC',
+                placeholder: 'Select current CTC',
                 questionType: QuestionType.SELECT,
                 isRequired: true,
                 sortOrder: 1,
@@ -170,7 +174,7 @@ const steps = [
             {
                 questionKey: 'targetCtc',
                 questionText: 'Target CTC',
-                placeholder: 'Select your target CTC',
+                placeholder: 'Select target CTC',
                 questionType: QuestionType.SELECT,
                 isRequired: true,
                 sortOrder: 2,
@@ -178,25 +182,25 @@ const steps = [
                     {
                         optionLabel: '₹10–20 LPA',
                         optionValue: '10-20_lpa',
-                        score: 5,
+                        score: 0,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: '₹20–30 LPA',
                         optionValue: '20-30_lpa',
-                        score: 10,
+                        score: 0,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: '₹30–50 LPA',
                         optionValue: '30-50_lpa',
-                        score: 15,
+                        score: 0,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: '₹50 LPA+',
                         optionValue: '50_plus_lpa',
-                        score: 20,
+                        score: 0,
                         sortOrder: 4,
                     },
                 ],
@@ -206,38 +210,39 @@ const steps = [
 
     {
         stepNo: 4,
-        title: 'What do you feel is your biggest preparation gap?',
+        title: 'What do you feel is your biggest interview-readiness gap?',
         helperText:
-      'This helps us identify the capability gap affecting your interviews.',
+            'This helps us identify why your job-switch outcomes may not be improving.',
         questions: [
             {
                 questionKey: 'mainGap',
                 questionText:
-          'What do you feel is your biggest preparation gap?',
+                    'What do you feel is your biggest interview-readiness gap?',
                 questionType: QuestionType.RADIO,
                 isRequired: true,
                 sortOrder: 1,
                 options: [
                     {
-                        optionLabel: 'DSA',
+                        optionLabel: 'DSA and problem solving',
                         optionValue: 'dsa',
                         score: 15,
                         sortOrder: 1,
                     },
                     {
-                        optionLabel: 'System design',
+                        optionLabel: 'System design and architecture',
                         optionValue: 'system_design',
                         score: 16,
                         sortOrder: 2,
                     },
                     {
-                        optionLabel: 'Projects/profile',
+                        optionLabel: 'Projects and profile depth',
                         optionValue: 'projects_profile',
                         score: 14,
                         sortOrder: 3,
                     },
                     {
-                        optionLabel: 'Interview communication',
+                        optionLabel:
+                            'Interview communication and confidence',
                         optionValue: 'interview_communication',
                         score: 13,
                         sortOrder: 4,
@@ -249,7 +254,7 @@ const steps = [
                         sortOrder: 5,
                     },
                     {
-                        optionLabel: 'No clear structure',
+                        optionLabel: 'No clear preparation structure',
                         optionValue: 'no_clear_structure',
                         score: 15,
                         sortOrder: 6,
@@ -261,43 +266,45 @@ const steps = [
 
     {
         stepNo: 5,
-        title: 'What type of role are you targeting?',
-        helperText:
-      'This helps us understand the direction of your job switch.',
+        title: 'What kind of role are you trying to move into?',
+        helperText: 'This helps us understand your target direction.',
         questions: [
             {
                 questionKey: 'targetRoleType',
-                questionText: 'What type of role are you targeting?',
+                questionText:
+                    'What kind of role are you trying to move into?',
                 questionType: QuestionType.RADIO,
                 isRequired: true,
                 sortOrder: 1,
                 options: [
                     {
-                        optionLabel: 'Product software role',
+                        optionLabel:
+                            'Product company software engineering role',
                         optionValue: 'product_software',
                         score: 12,
                         sortOrder: 1,
                     },
                     {
-                        optionLabel: 'Backend role',
+                        optionLabel: 'Backend engineering role',
                         optionValue: 'backend',
                         score: 10,
                         sortOrder: 2,
                     },
                     {
-                        optionLabel: 'Fullstack role',
+                        optionLabel: 'Fullstack engineering role',
                         optionValue: 'fullstack',
                         score: 10,
                         sortOrder: 3,
                     },
                     {
-                        optionLabel: 'AI-native role',
+                        optionLabel:
+                            'AI-native software engineering role',
                         optionValue: 'ai_native',
                         score: 12,
                         sortOrder: 4,
                     },
                     {
-                        optionLabel: 'Not sure',
+                        optionLabel: 'I am not sure yet',
                         optionValue: 'not_sure',
                         score: 4,
                         sortOrder: 5,
@@ -309,14 +316,15 @@ const steps = [
 
     {
         stepNo: 6,
-        title: 'How soon do you want to seriously work on your switch?',
+        title:
+            'How soon do you want to seriously work on your next switch?',
         helperText:
-      'This helps us prioritize serious candidates for strategy calls.',
+            'This helps us prioritize serious candidates for strategy calls.',
         questions: [
             {
                 questionKey: 'urgency',
                 questionText:
-          'How soon do you want to seriously work on your switch?',
+                    'How soon do you want to seriously work on your next switch?',
                 questionType: QuestionType.RADIO,
                 isRequired: true,
                 sortOrder: 1,
@@ -340,7 +348,7 @@ const steps = [
                         sortOrder: 3,
                     },
                     {
-                        optionLabel: 'Just exploring',
+                        optionLabel: 'Just exploring right now',
                         optionValue: 'just_exploring',
                         score: 0,
                         sortOrder: 4,
@@ -353,21 +361,21 @@ const steps = [
     {
         stepNo: 7,
         title:
-      'Can you invest in a structured career program if it is the right fit?',
+            'Can you invest in a structured career program if it is the right fit?',
         helperText:
-      'The program requires time, effort, and financial commitment.',
+            'The program requires time, effort, and financial commitment.',
         questions: [
             {
                 questionKey: 'investmentReadiness',
                 questionText:
-          'Can you invest in a structured career program if it is the right fit?',
+                    'Can you invest in a structured career program if it is the right fit?',
                 questionType: QuestionType.RADIO,
                 isRequired: true,
                 sortOrder: 1,
                 options: [
                     {
                         optionLabel:
-              'Yes, I can invest if the program is right for me',
+                            'Yes, I can invest if the program is right for me',
                         optionValue: 'yes_invest',
                         score: 20,
                         sortOrder: 1,
@@ -379,13 +387,14 @@ const steps = [
                         sortOrder: 2,
                     },
                     {
-                        optionLabel: 'Not sure',
+                        optionLabel: 'Not sure yet',
                         optionValue: 'not_sure',
                         score: 5,
                         sortOrder: 3,
                     },
                     {
-                        optionLabel: 'No',
+                        optionLabel:
+                            'No, I cannot invest right now',
                         optionValue: 'no',
                         score: 0,
                         sortOrder: 4,
@@ -395,9 +404,9 @@ const steps = [
 
             {
                 questionKey: 'notes',
-                questionText: 'Anything else you want us to know?',
+                questionText: 'Anything else we should know?',
                 placeholder:
-          'Tell us anything about your job-switch situation, goals, or challenges...',
+                    'Example: I have been applying to product companies but I am not getting enough calls. I think my DSA and system design are weak...',
                 questionType: QuestionType.TEXTAREA,
                 isRequired: false,
                 sortOrder: 2,
@@ -418,10 +427,10 @@ export default {
                     slug: FORM_SLUG,
                     segmentKey: 'job_switch',
                     title:
-            'Let’s check what may be stopping you from getting better interview calls.',
+                        'Let’s check what may be stopping you from getting better interview calls.',
                     subTitle: 'Product Company Readiness Check',
                     description:
-            'Answer a few questions so our team can understand your current job-switch situation, preparation gaps, and whether the AI-Proof Engineer Program is the right fit for you.',
+                        'Answer a few questions so our team can understand your current job-switch situation, preparation gaps, and whether the AI-Proof Engineer Program is the right fit for you.',
                     version: 1,
                     isActive: true,
                 },
@@ -467,21 +476,32 @@ export default {
 
                     if (questionData.options) {
                         for (const optionData of questionData.options) {
-                            await FormQuestionOption.findOrCreate({
-                                where: {
-                                    questionId: question.id,
-                                    optionValue: optionData.optionValue,
-                                },
-                                defaults: {
-                                    questionId: question.id,
+                            const [option] =
+                                await FormQuestionOption.findOrCreate({
+                                    where: {
+                                        questionId: question.id,
+                                        optionValue: optionData.optionValue,
+                                    },
+                                    defaults: {
+                                        questionId: question.id,
+                                        optionLabel: optionData.optionLabel,
+                                        optionValue: optionData.optionValue,
+                                        score: optionData.score,
+                                        sortOrder: optionData.sortOrder,
+                                        isActive: true,
+                                    },
+                                    transaction,
+                                });
+
+                            await option.update(
+                                {
                                     optionLabel: optionData.optionLabel,
-                                    optionValue: optionData.optionValue,
                                     score: optionData.score,
                                     sortOrder: optionData.sortOrder,
                                     isActive: true,
                                 },
-                                transaction,
-                            });
+                                { transaction },
+                            );
                         }
                     }
                 }
