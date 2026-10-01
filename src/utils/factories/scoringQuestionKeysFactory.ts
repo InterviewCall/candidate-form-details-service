@@ -1,10 +1,34 @@
 export const FORM_SCORING_QUESTION_KEYS: Record<string, string[]> = {
-    'ai-proof-engineer-readiness-check': [
+    'job-switch': [
         'yoe',
+        'jobSearchSituation',
         'currentCtc',
-        'aiConcern',
-        'currentCareerSituation',
+        'targetCtc',
+        'mainGap',
+        'targetRoleType',
         'urgency',
         'investmentReadiness',
-    ]
+    ],
+
+    'ai-fear': [
+        'yoe',
+        'aiConcern',
+        'currentCtc',
+        'targetCtc',
+        'mainGap',
+        'careerSituation',
+        'urgency',
+        'investmentReadiness',
+    ],
+
+    'salary-stagnation': [
+        'yoe',
+        'growthSituation',
+        'currentCtc',
+        'targetCtc',
+        'mainGap',
+        'growthTarget',
+        'urgency',
+        'investmentReadiness',
+    ],
 };
