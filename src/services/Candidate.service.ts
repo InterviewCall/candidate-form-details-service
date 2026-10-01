@@ -113,6 +113,12 @@ class CandidateService {
                 transaction
             );
 
+            logger.info('Candidate answers saved', {
+                submissionId: submission.id,
+                submissionPublicId: submission.publicId,
+                answerCount: answerRows.length
+            });
+
             const scorableSelectedOptionIds: number[] = this.getScorableSelectedOptionIds(
                 submission.formSlug,
                 payload.answers

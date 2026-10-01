@@ -9,8 +9,10 @@ class CandidateAnswerRepository extends BaseRepository<CandidateAnswer> {
     }
 
     async createBulk(data: CreationAttributes<CandidateAnswer>[], transaction: Transaction): Promise<void> {
-        await this.model.bulkCreate(data, { 
-            ignoreDuplicates: true, 
+        // No INSERT IGNORE: a bad row must fail loudly (and roll the submission back) instead of being skipped silently.
+        // If the same submission is sent again, the existing answers are updated rather than dropped.
+        await this.model.bulkCreate(data, {
+            updateOnDuplicate: ['questionKey', 'answerText', 'answerNumber', 'answerJson', 'selectedOptionId'],
             transaction
         });
     }
