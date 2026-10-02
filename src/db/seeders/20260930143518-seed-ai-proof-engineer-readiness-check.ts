@@ -93,27 +93,27 @@ const steps = [
                     {
                         optionLabel:
               'Very worried — I feel my current work may become replaceable',
-                        optionValue: 'very_worried_replaceable',
+                        optionValue: 'Very worried - my current work may become replaceable',
                         score: 20,
                         sortOrder: 1,
                     },
                     {
                         optionLabel:
               'Somewhat worried — I know I need to upskill',
-                        optionValue: 'somewhat_worried_upskill',
+                        optionValue: 'Somewhat worried - I know I need to upskill',
                         score: 16,
                         sortOrder: 2,
                     },
                     {
                         optionLabel:
               'Not worried, but I want to stay ahead',
-                        optionValue: 'not_worried_stay_ahead',
+                        optionValue: 'Not worried but I want to stay ahead',
                         score: 12,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: 'I am not sure yet',
-                        optionValue: 'not_sure_yet',
+                        optionValue: 'Not sure yet',
                         score: 5,
                         sortOrder: 4,
                     },
@@ -138,25 +138,25 @@ const steps = [
                 options: [
                     {
                         optionLabel: 'Less than ₹5 LPA',
-                        optionValue: 'less_than_5_lpa',
+                        optionValue: '<5 LPA',
                         score: 5,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: '₹5–10 LPA',
-                        optionValue: '5-10_lpa',
+                        optionValue: '5-10 LPA',
                         score: 15,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: '₹10–20 LPA',
-                        optionValue: '10-20_lpa',
+                        optionValue: '10-20 LPA',
                         score: 20,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: '₹20 LPA+',
-                        optionValue: '20_plus_lpa',
+                        optionValue: '20+ LPA',
                         score: 20,
                         sortOrder: 4,
                     },
@@ -173,25 +173,25 @@ const steps = [
                 options: [
                     {
                         optionLabel: '₹10–20 LPA',
-                        optionValue: '10-20_lpa',
+                        optionValue: '10-20 LPA',
                         score: 0,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: '₹20–30 LPA',
-                        optionValue: '20-30_lpa',
+                        optionValue: '20-30 LPA',
                         score: 0,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: '₹30–50 LPA',
-                        optionValue: '30-50_lpa',
+                        optionValue: '30-50 LPA',
                         score: 0,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: '₹50 LPA+',
-                        optionValue: '50_plus_lpa',
+                        optionValue: '50+ LPA',
                         score: 0,
                         sortOrder: 4,
                     },
@@ -216,31 +216,31 @@ const steps = [
                 options: [
                     {
                         optionLabel: 'AI-assisted engineering skills',
-                        optionValue: 'ai_assisted_engineering',
+                        optionValue: 'AI-assisted engineering skills',
                         score: 0,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: 'System design and architecture',
-                        optionValue: 'system_design_architecture',
+                        optionValue: 'System design and architecture',
                         score: 0,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: 'DSA and problem solving',
-                        optionValue: 'dsa_problem_solving',
+                        optionValue: 'DSA and problem solving',
                         score: 0,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: 'Real-world software engineering depth',
-                        optionValue: 'real_world_engineering_depth',
+                        optionValue: 'Real-world software engineering depth',
                         score: 0,
                         sortOrder: 4,
                     },
                     {
                         optionLabel: 'Interview confidence and communication',
-                        optionValue: 'interview_confidence_communication',
+                        optionValue: 'Interview confidence and communication',
                         score: 0,
                         sortOrder: 5,
                     },
@@ -266,32 +266,32 @@ const steps = [
                     {
                         optionLabel:
               'I am worried AI will reduce opportunities',
-                        optionValue: 'ai_reduce_opportunities',
+                        optionValue: 'I am worried AI will reduce opportunities',
                         score: 18,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: 'My current work feels repetitive',
-                        optionValue: 'current_work_repetitive',
+                        optionValue: 'My current work feels repetitive',
                         score: 15,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: 'I do not know what to learn next',
-                        optionValue: 'dont_know_what_to_learn',
+                        optionValue: 'I do not know what to learn next',
                         score: 12,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: 'I want to switch to better roles',
-                        optionValue: 'switch_to_better_roles',
+                        optionValue: 'I want to switch to better roles',
                         score: 18,
                         sortOrder: 4,
                     },
                     {
                         optionLabel:
               'I want to become more valuable in my current company',
-                        optionValue: 'more_valuable_current_company',
+                        optionValue: 'I want to become more valuable in my current company',
                         score: 14,
                         sortOrder: 5,
                     },
@@ -316,25 +316,25 @@ const steps = [
                 options: [
                     {
                         optionLabel: 'Immediately, within 1–2 months',
-                        optionValue: 'immediately_1_2_months',
+                        optionValue: 'Immediately, within 1-2 months',
                         score: 20,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: 'Within 3–6 months',
-                        optionValue: 'within_3_6_months',
+                        optionValue: 'Within 3-6 months',
                         score: 15,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: 'Within 6–12 months',
-                        optionValue: 'within_6_12_months',
+                        optionValue: 'Within 6-12 months',
                         score: 8,
                         sortOrder: 3,
                     },
                     {
-                        optionLabel: 'Just exploring right now',
-                        optionValue: 'just_exploring',
+                        optionLabel: 'Just exploring',
+                        optionValue: 'Just exploring',
                         score: 0,
                         sortOrder: 4,
                     },
@@ -361,25 +361,25 @@ const steps = [
                     {
                         optionLabel:
               'Yes, I can invest if the program is right for me',
-                        optionValue: 'yes_invest',
+                        optionValue: 'Yes, I can invest if the program is right for me',
                         score: 20,
                         sortOrder: 1,
                     },
                     {
                         optionLabel: 'I would need EMI options',
-                        optionValue: 'emi_options',
+                        optionValue: 'I would need EMI options',
                         score: 15,
                         sortOrder: 2,
                     },
                     {
                         optionLabel: 'Not sure yet',
-                        optionValue: 'not_sure_yet',
+                        optionValue: 'Not sure yet',
                         score: 5,
                         sortOrder: 3,
                     },
                     {
                         optionLabel: 'No, I cannot invest right now',
-                        optionValue: 'cannot_invest',
+                        optionValue: 'No, I cannot invest right now',
                         score: 0,
                         sortOrder: 4,
                     },
