@@ -12,7 +12,7 @@ import CandidateAnswerRepository from '../repositories/CandidateAnswer.repositor
 import CandidateSubmissionRepository from '../repositories/CandidateSubmission.repository';
 import FormQuestionOptionRepository from '../repositories/FormQuestionOption.repository';
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
-import { CreateCandidateResponse, CreateSubmissionResponse, GetCandidateResponse, GetCandidateSubmissionResponse } from '../types/Response.type';
+import { CreateCandidateResponse, CreateSubmissionResponse, GetCandidateResponse, GetCandidateSubmissionResponse,GetCandidateSubmissionStepResponse } from '../types/Response.type';
 import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionStatus';
 import { LeadTemperature } from '../utils/enums/LeadTemperature';
 import { BadRequestError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
@@ -190,36 +190,107 @@ class CandidateService {
         }
     }
 
-    async findCandidateSubmission(submissionId: string): Promise<GetCandidateSubmissionResponse> {
+    async findCandidateSubmission(
+        submissionId: string
+    ): Promise<GetCandidateSubmissionResponse> {
         try {
             if(!isValidUUID(submissionId)) {
                 throw new BadRequestError('Submission Id should be a valid UUID');
             }
 
-            const candidateSubmission = await this.candidateSubmissionRepository.findById(submissionId);
+            const candidateSubmission =
+                await this.candidateSubmissionRepository.findById(submissionId);
 
             if(!candidateSubmission) {
-                throw new NotFoundError('You have not submitted any qualification form, please submit it first');
+                throw new NotFoundError(
+                    'You have not submitted any qualification form, please submit it first'
+                );
             }
 
+           const form = await this.qualificationFormRepository.findFormIdWithSlug(
+                candidateSubmission.formSlug
+            );
+
+            if(!form) {
+                throw new NotFoundError('Qualification form not found');
+            }
+
+            const answers =
+                await this.candidateAnswerRepository.findAllBySubmissionId(
+                    candidateSubmission.id
+                );
+
+            const steps: GetCandidateSubmissionStepResponse[] = [];
+
+            for(const answer of answers) {
+                const question = answer.question;
+                const step = question?.step;
+
+                if(!question || !step) {
+                    continue;
+                }
+
+                let currentStep = steps.find(
+                    (item) => item.stepNo === step.stepNo
+                );
+
+                if(!currentStep) {
+                    currentStep = {
+                        stepNo: step.stepNo,
+                        title: step.title,
+                        answers: []
+                    };
+
+                    steps.push(currentStep);
+                }
+
+                currentStep.answers.push({
+                    questionKey: question.questionKey,
+                    questionText: question.questionText,
+                    answerText: answer.answerText ?? answer.selectedOption?.optionLabel ?? null,
+                    optionScore: answer.selectedOption?.score ?? null
+                });
+            }
+
+            steps.sort((a, b) => a.stepNo - b.stepNo);
+
             return {
-                submissionId: candidateSubmission.publicId,
-                candidateId: candidateSubmission.candidateId,
-                candidatePublicId: candidateSubmission.candidate!.public_id,
+                publicId: candidateSubmission.publicId,
+
+                candidate: {
+                    fullName: candidateSubmission.candidate!.fullName,
+                    email: candidateSubmission.candidate!.email,
+                    phone: candidateSubmission.candidate!.phone
+                },
+
+                formSlug: candidateSubmission.formSlug,
+                formName: form.name,
+
                 status: candidateSubmission.status,
+
+                leadScore: candidateSubmission.leadScore,
+                leadTemperature: candidateSubmission.leadTemperature,
+
+                submittedAt: candidateSubmission.submittedAt
+                    ? candidateSubmission.submittedAt.toISOString()
+                    : null,
+
+                steps
             };
         } catch (error) {
             logger.error('Submission api error', error);
             console.log(error);
 
-            if(error instanceof BadRequestError || error instanceof NotFoundError) {
+            if(
+                error instanceof BadRequestError ||
+                error instanceof NotFoundError
+            ) {
                 throw error;
             }
 
             throw new InternalServerError('Something went wrong, try again');
         }
     }
-
     private getScorableSelectedOptionIds(formSlug: string, answers: CreateCandidateSubmissionDto['answers']): number[] {
         const scoringQuestionKeys: string[] = FORM_SCORING_QUESTION_KEYS[formSlug];
 

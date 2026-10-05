@@ -22,7 +22,12 @@ class CandidateAnswerRepository extends BaseRepository<CandidateAnswer> {
             },
             include: [
                 {
-                    association: 'question'
+                    association: 'question',
+                    include: [
+                        {
+                            association: 'step'
+                        }
+                    ]
                 },
                 {
                     association: 'selectedOption'

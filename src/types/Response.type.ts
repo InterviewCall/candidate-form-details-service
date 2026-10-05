@@ -63,11 +63,39 @@ export type CreateSubmissionResponse = {
     submissionId: string,
 };
 
+export type GetCandidateSubmissionAnswerResponse = {
+    questionKey: string;
+    questionText: string;
+    answerText: string | null;
+    optionScore: number | null;
+}
+
+export type GetCandidateSubmissionStepResponse = {
+    stepNo: number;
+    title: string;
+    answers: GetCandidateSubmissionAnswerResponse[];
+}
+
 export type GetCandidateSubmissionResponse = {
-    submissionId: string,
-    candidateId: number
-    candidatePublicId: string
-    status: string
+    publicId: string;
+
+    candidate: {
+        fullName: string;
+        email: string;
+        phone: string;
+    };
+
+    formSlug: string;
+    formName: string;
+
+    status: string;
+
+    leadScore: number | null;
+    leadTemperature: string | null;
+
+    submittedAt: string | null;
+
+    steps: GetCandidateSubmissionStepResponse[];
 }
 
 export type GetCandidateResponse = {
