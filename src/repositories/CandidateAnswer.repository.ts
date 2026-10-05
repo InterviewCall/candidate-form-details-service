@@ -14,6 +14,24 @@ class CandidateAnswerRepository extends BaseRepository<CandidateAnswer> {
             transaction
         });
     }
+
+    async findAllBySubmissionId(submissionId: number): Promise<CandidateAnswer[]> {
+        const answers = await this.model.findAll({
+            where: {
+                submissionId
+            },
+            include: [
+                {
+                    association: 'question'
+                },
+                {
+                    association: 'selectedOption'
+                }
+            ]
+        });
+
+        return answers;
+    }
 }
 
 export default CandidateAnswerRepository;

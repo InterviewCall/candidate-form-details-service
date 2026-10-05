@@ -61,12 +61,26 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
 
     async findAllSubmissions(): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
-            include: [{
-                model: Candidate,
-                as: 'candidate',
-                attributes: ['fullName', 'email', 'phone'],
-                required: true
-            }]
+            attributes: [
+                'publicId',
+                'formSlug',
+                'status',
+                'leadScore',
+                'leadTemperature',
+                'submittedAt'
+            ],
+            include: [
+                {
+                    model: Candidate,
+                    as: 'candidate',
+                    attributes: ['fullName', 'email', 'phone'],
+                    required: true
+                },
+                {
+                    association: 'form',
+                    attributes: ['name']
+                }
+            ]
         });
 
         return submissions;
