@@ -59,6 +59,19 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         );
     }
 
+    async findAllSubmissions(): Promise<CandidateSubmission[]> {
+        const submissions = await this.model.findAll({
+            include: [{
+                model: Candidate,
+                as: 'candidate',
+                attributes: ['fullName', 'email', 'phone'],
+                required: true
+            }]
+        });
+
+        return submissions;
+    }
+
     async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
             where: {

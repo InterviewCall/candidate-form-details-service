@@ -105,13 +105,27 @@ async function markSubmissionAsBookedHandler(req: Request,res: Response,next: Ne
     } catch (error) {
         next(error);
     }
+
+    
 }
 
+async function getAllCandidates(_req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await candidateSubmissionService.findAllSubmissions();
+        res.status(StatusCodes.OK).json(
+            buildSuccessResponse('Candidate fetched successfully', response)
+        );
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
 export default {
     createCadidateHandler,
     createCandidateSubmissionHandler,
     getCandidateSubmissionHandler,
     getCandidateHandler,
     getAllCandidatesWhereBookingPending,
-    markSubmissionAsBookedHandler
+    markSubmissionAsBookedHandler,
+    getAllCandidates
 };
