@@ -1,30 +1,6 @@
 import dotenv from 'dotenv';
 
-type ServerConfig = {
-    PORT: number
-    NODE_ENV?: string
-    REDIS_PORT: number,
-    REDIS_HOST: string
-}
-
-type QueueConfig = {
-    JOB_ATTEMPTS: number
-    RETRY_BACKOFF_MS: number
-    FAILED_JOB_RETENTION_DAYS: number
-    FAILED_JOB_RETENTION_COUNT: number
-}
-
-type DBConfig = {
-    DB_HOST: string
-    DB_USER: string
-    DB_PASSWORD: string
-    DB_NAME: string
-}
-
-type FrontendConfig = {
-    ADMIN_FRONTEND_URL: string,
-    CANDIDATE_FRONTEND_URL: string,
-}
+import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, ServerConfig } from '../types/Config.type';
 
 dotenv.config();
 
@@ -57,4 +33,22 @@ export const dbConfig: DBConfig = {
 export const frontendConfig: FrontendConfig = {
     ADMIN_FRONTEND_URL: String(process.env.ADMIN_FRONTEND_URL),
     CANDIDATE_FRONTEND_URL: String(process.env.CANDIDATE_FRONTEND_URL)
+};
+
+// Shared secret for service-to-service calls, in both directions: the header name and key must match the other services.
+export const internalApiConfig: InternalApiConfig = {
+    INTERNAL_API_KEY: process.env.SCHEDULER_INTERNAL_API_KEY || '',
+    INTERNAL_API_KEY_HEADER: process.env.INTERNAL_API_KEY_HEADER || 'x-internal-api-key'
+};
+
+// The slot-booking-service: the admin submission pages ask it which bookings belong to a page of submissions.
+export const bookingServiceConfig: InternalServiceConfig = {
+    BASE_URL: process.env.BOOKING_SERVICE_BASE_URL || 'http://localhost:3003/api/v1',
+    TIMEOUT_MS: Number(process.env.BOOKING_SERVICE_TIMEOUT_MS) || 3000
+};
+
+// The notification-service: the admin submission detail page asks it which messages were sent.
+export const notificationServiceConfig: InternalServiceConfig = {
+    BASE_URL: process.env.NOTIFICATION_SERVICE_BASE_URL || 'http://localhost:3005/api/v1',
+    TIMEOUT_MS: Number(process.env.NOTIFICATION_SERVICE_TIMEOUT_MS) || 3000
 };
