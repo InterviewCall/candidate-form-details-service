@@ -76,7 +76,7 @@ class QualificationFormRepository extends BaseRepository<QualificationForm> {
                 slug,
                 isActive: true
             },
-            attributes: ['id']
+            attributes: ['id', 'name']
         });
 
         return form;
