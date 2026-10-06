@@ -247,7 +247,7 @@ class CandidateService {
                 currentStep.answers.push({
                     questionKey: question.questionKey,
                     questionText: question.questionText,
-                    answerText: answer.answerText ?? answer.selectedOption?.optionLabel ?? null,
+                    answerText: answer.selectedOption?.optionLabel ?? answer.answerText ?? null,
                     optionScore: answer.selectedOption?.score ?? null
                 });
             }
