@@ -79,6 +79,9 @@ export type GetCandidateSubmissionStepResponse = {
 export type GetCandidateSubmissionResponse = {
     publicId: string;
 
+    candidateId: number;
+    candidatePublicId: string;
+
     candidate: {
         fullName: string;
         email: string;

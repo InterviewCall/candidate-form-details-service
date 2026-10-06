@@ -9,7 +9,7 @@ const candidateSubmissionService = new CandidateSubmissionService(
 );
 
 export function bookingReminderCron(): void {
-    cron.schedule('*/2 * * * * ', async () => {
+    cron.schedule('*/10 * * * *', async () => {
         try {
             await candidateSubmissionService.sendReminderNotificationForPendingBookings();
         } catch (error) {

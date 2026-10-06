@@ -256,6 +256,8 @@ class CandidateService {
 
             return {
                 publicId: candidateSubmission.publicId,
+                candidateId: candidateSubmission.candidateId,
+                candidatePublicId: candidateSubmission.candidate!.public_id,
 
                 candidate: {
                     fullName: candidateSubmission.candidate!.fullName,

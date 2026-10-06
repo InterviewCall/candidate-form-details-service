@@ -40,7 +40,7 @@ class CandidateAnswer extends Model<InferAttributes<CandidateAnswer>, InferCreat
 
     // BelongsTo CandidateSubmission mixins
     declare getSubmission: BelongsToGetAssociationMixin<CandidateSubmission>;
-    declare setSubmission: BelongsToSetAssociationMixin<CandidateSubmission, string>;
+    declare setSubmission: BelongsToSetAssociationMixin<CandidateSubmission, number>;
     declare createSubmission: BelongsToCreateAssociationMixin<CandidateSubmission>;
 
     // BelongsTo FormQuestion mixins
@@ -68,7 +68,7 @@ CandidateAnswer.init({
     },
 
     submissionId: {
-        type: DataTypes.UUID,
+        type: DataTypes.BIGINT.UNSIGNED,
         allowNull: false,
         references: {
             model: CandidateSubmission,
@@ -152,6 +152,15 @@ CandidateAnswer.init({
     tableName: 'candidate_answers',
     underscored: true,
     timestamps: true,
+
+    indexes: [
+        {
+            unique: true,
+            name: 'uq_candidate_answers_submission_id_question_id',
+            fields: ['submissionId', 'questionId'],
+        },
+    ],
+
     sequelize
 });
 
