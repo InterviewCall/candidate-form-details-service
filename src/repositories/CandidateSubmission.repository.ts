@@ -59,6 +59,19 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
         );
     }
 
+    async markSubmissionAsCancelled(id: string): Promise<void> {
+    await this.model.update(
+        {
+            status: CandidateSubmissionStatus.CANCELLED
+        },
+        {
+            where: {
+                publicId: id
+            }
+        },
+    );
+}
+
     async findAllBookingPendingSubmisssions(cutoffTime: Date): Promise<CandidateSubmission[]> {
         const submissions = await this.model.findAll({
             where: {

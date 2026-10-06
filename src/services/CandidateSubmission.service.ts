@@ -69,6 +69,21 @@ class CandidateSubmissionService {
             submissionId
         );
     }
+
+    async markSubmissionAsCancelled(submissionId: string): Promise<void> {
+    const submission =
+        await this.candidateSubmissionRepository.findById(submissionId);
+
+    if (!submission) {
+        throw new NotFoundError(
+            `No candidate submission found with id: ${submissionId}`
+        );
+    }
+
+    await this.candidateSubmissionRepository.markSubmissionAsCancelled(
+        submissionId
+    );
+}
 }
 
 export default CandidateSubmissionService;

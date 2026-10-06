@@ -24,6 +24,12 @@ submissionRouter.put(
     candidateController.markSubmissionAsBookedHandler
 );
 
+submissionRouter.put(
+    '/:submissionId/cancel',
+    validateRequestParams(getCandidateSubmissionParamsSchema),
+    candidateController.markSubmissionAsCancelledHandler
+);
+
 submissionRouter.get(
     '/:submissionId',
     validateRequestParams(getCandidateSubmissionParamsSchema),
