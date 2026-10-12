@@ -40,6 +40,11 @@ export type InternalApiConfig = {
     INTERNAL_API_KEY_HEADER: string
 }
 
+export type WorkrIntegrationConfig = {
+    API_KEY: string
+    API_KEY_HEADER: string
+}
+
 export type InternalServiceConfig = {
     BASE_URL: string
     TIMEOUT_MS: number

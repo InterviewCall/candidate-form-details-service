@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ServerConfig } from '../types/Config.type';
+import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ServerConfig, WorkrIntegrationConfig } from '../types/Config.type';
 
 dotenv.config();
 
@@ -61,6 +61,13 @@ export const frontendConfig: FrontendConfig = {
 export const internalApiConfig: InternalApiConfig = {
     INTERNAL_API_KEY: process.env.SCHEDULER_INTERNAL_API_KEY || '',
     INTERNAL_API_KEY_HEADER: process.env.INTERNAL_API_KEY_HEADER || 'x-internal-api-key'
+};
+
+// WorkR (a different server, reaching this service over the public API domain) asks which of its users already registered here.
+// It gets its own key, separate from the internal one, so a leaked WorkR key cannot read submissions or call the other services.
+export const workrIntegrationConfig: WorkrIntegrationConfig = {
+    API_KEY: process.env.WORKR_INTEGRATION_API_KEY || '',
+    API_KEY_HEADER: process.env.WORKR_INTEGRATION_API_KEY_HEADER || 'x-workr-api-key'
 };
 
 // The slot-booking-service: the admin submission pages ask it which bookings belong to a page of submissions.

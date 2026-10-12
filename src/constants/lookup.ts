@@ -9,3 +9,6 @@ export const BOOKING_LOOKUP_MAX_IDS = 100;
 
 // The notification service accepts at most this many ids per call (see its lookup validator).
 export const NOTIFICATION_LOOKUP_MAX_IDS = 100;
+
+// What this service accepts from WorkR (POST /integrations/workr/engagement). WorkR must send no more per call.
+export const MAX_ENGAGEMENT_CONTACTS = 200;
