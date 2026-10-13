@@ -93,6 +93,101 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
             transaction
         });
     }
+    
+    // Finds candidate submissions eligible for VSL abandonment enrollment.
+    async findVslEnrollmentCandidates(filters: {
+        createdAfter: Date;
+        createdBefore: Date;
+        formSlugs: string[];
+        limit: number;
+    }): Promise<CandidateSubmission[]> {
+        // An empty allowlist must not enrol candidates from every form.
+        if (filters.formSlugs.length === 0) {
+            return [];
+        }
+
+        if (!Number.isInteger(filters.limit) || filters.limit < 1) {
+            throw new Error('limit must be a positive integer');
+        }
+
+        return await this.model.findAll({
+            where: {
+                // Only candidates who have not completed the qualification form.
+                status: CandidateSubmissionStatus.SUBMISSION_PENDING,
+
+                // Enrollment age window, based on the popup submission timestamp.
+                createdAt: {
+                    [Op.gte]: filters.createdAfter,
+                    [Op.lte]: filters.createdBefore,
+                },
+
+                // Only the configured landing-page forms are eligible.
+                formSlug: {
+                    [Op.in]: filters.formSlugs,
+                },
+
+                deletedAt: null,
+
+                // Do not create a second run for an existing submission,
+                // or while this candidate already has an active VSL run.
+                [Op.and]: [
+                    literal(`
+                        NOT EXISTS (
+                            SELECT 1
+                            FROM vsl_runs AS vr
+                            WHERE
+                                vr.submission_id = CandidateSubmission.id
+                                OR (
+                                    vr.candidate_id = CandidateSubmission.candidate_id
+                                    AND vr.status = 'active'
+                                )
+                        )
+                    `),
+                    // Prevent another VSL run for an email that already has a VSL run.
+                    // TRIM and LOWER make the comparison case-insensitive and whitespace-safe.
+                    literal(`
+                        NOT EXISTS (
+                            SELECT 1
+                            FROM vsl_runs AS email_vr
+                            INNER JOIN candidates AS email_candidate
+                                ON email_candidate.id = email_vr.candidate_id
+                            WHERE LOWER(TRIM(email_candidate.email)) =
+                                LOWER(TRIM(candidate.email))
+                        )
+                    `),
+
+                ],
+            },
+
+            include: [
+                {
+                    model: Candidate,
+                    as: 'candidate',
+                    attributes: [
+                        'id',
+                        'fullName',
+                        'email',
+                        'emailUnsubscribedAt',
+                        'optedOutAt',
+                    ],
+                    where: {
+                        deletedAt: null,
+                        emailUnsubscribedAt: null,
+                        optedOutAt: null,
+                    },
+                    required: true,
+                },
+            ],
+
+            order: [
+                ['createdAt', 'ASC'],
+                ['id', 'ASC'],
+            ],
+
+            limit: filters.limit,
+        });
+    }
+
 
 
     private buildAdminBaseConditions(filters: AdminSubmissionBaseFilters): WhereOptions[] {
