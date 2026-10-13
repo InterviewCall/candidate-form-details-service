@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, ServerConfig } from '../types/Config.type';
+import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig,ReminderConfig,ServerConfig } from '../types/Config.type';
 
 dotenv.config();
 
@@ -51,4 +51,14 @@ export const bookingServiceConfig: InternalServiceConfig = {
 export const notificationServiceConfig: InternalServiceConfig = {
     BASE_URL: process.env.NOTIFICATION_SERVICE_BASE_URL || 'http://localhost:3005/api/v1',
     TIMEOUT_MS: Number(process.env.NOTIFICATION_SERVICE_TIMEOUT_MS) || 3000
+};
+
+const MINUTE_MS = 60 * 1000;
+const HOUR_MS = 60 * MINUTE_MS;
+
+// Reminders for candidates who submitted the form but have not booked a slot.
+// FIRST_DELAY_MS: time after submission for reminder 1; GAP_MS: time between reminders.
+export const reminderConfig: ReminderConfig = {
+    FIRST_DELAY_MS: 10 * MINUTE_MS,
+    GAP_MS: 6 * HOUR_MS
 };
