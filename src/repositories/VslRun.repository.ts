@@ -11,12 +11,21 @@ class VslRunRepository extends BaseRepository<VslRun> {
     }
 
     // Finds an existing VSL run using its submission ID.
-    async findBySubmissionId(submissionId: number,transaction?: Transaction): Promise<VslRun | null> {
+    
+    async findBySubmissionId(submissionId: number,transaction?: Transaction,lockForUpdate = false,): Promise<VslRun | null> {
         return await this.model.findOne({
             where: { submissionId },
             transaction,
+            ...(transaction && lockForUpdate
+                ? { lock: transaction.LOCK.UPDATE }
+                : {}),
         });
     }
+    
+    async saveManualCallRun(run: VslRun,transaction: Transaction,): Promise<VslRun> {
+        return await run.save({ transaction });
+    }
+
 
     // Finds an active VSL run for the given candidate.
     async findActiveByCandidateId(candidateId: number,transaction?: Transaction): Promise<VslRun | null> {

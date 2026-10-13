@@ -114,6 +114,7 @@ VslRun.init(
                 'won',
                 'enrolled',
                 'later_stage',
+                'manual_call_done',
                 'other'
             ),
             allowNull: true,

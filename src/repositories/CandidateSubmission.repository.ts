@@ -12,7 +12,19 @@ class CandidateSubmissionRepository extends BaseRepository<CandidateSubmission> 
     constructor() {
         super(CandidateSubmission);
     }
-
+    async findManualCallSubmission(publicId: string,transaction?: Transaction,lockForUpdate = false,): Promise<CandidateSubmission | null> {
+        return await this.model.findOne({
+            where: {
+                publicId,
+                deletedAt: null,
+            },
+            attributes: ['id', 'status'],
+            transaction,
+            ...(transaction && lockForUpdate
+                ? { lock: transaction.LOCK.UPDATE }
+                : {}),
+        });
+    }
     async create(data: CreationAttributes<CandidateSubmission>, transaction?: Transaction): Promise<CandidateSubmission> {
         return await this.model.create(data, { transaction });
     }

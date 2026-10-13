@@ -39,6 +39,37 @@ class VslStepRepository extends BaseRepository<VslStep> {
         });
     }
 
+    
+    async cancelPendingOrProcessingForRun(
+        runId: number,
+        processedAt: Date,
+        transaction: Transaction,
+    ): Promise<number> {
+        const [affectedCount] = await this.model.update(
+            {
+                status: VslStepStatus.CANCELLED,
+                claimedAt: null,
+                processedAt,
+                lastError: 'VSL run stopped: manual call completed.',
+            },
+            {
+                where: {
+                    runId,
+                    status: {
+                        [Op.in]: [
+                            VslStepStatus.PENDING,
+                            VslStepStatus.PROCESSING,
+                        ],
+                    },
+                },
+                transaction,
+            },
+        );
+
+        return affectedCount;
+    }
+
+
     // Creates a step only if the same step does not already exist for the run.
     async createIfAbsent(
         data: CreationAttributes<VslStep>,

@@ -20,4 +20,18 @@ adminSubmissionRouter.get(
     adminSubmissionController.getAdminSubmissionDetailHandler
 );
 
+// GET /api/v1/admin/submissions/:publicId/vsl/manual-call
+adminSubmissionRouter.get(
+    '/:publicId/vsl/manual-call',
+    validateRequestParams(adminSubmissionParamsSchema),
+    adminSubmissionController.getVslManualCallStateHandler
+);
+
+// POST /api/v1/admin/submissions/:publicId/vsl/mark-call-done
+adminSubmissionRouter.post(
+    '/:publicId/vsl/mark-call-done',
+    validateRequestParams(adminSubmissionParamsSchema),
+    adminSubmissionController.markVslCallDoneHandler
+);
+
 export default adminSubmissionRouter;

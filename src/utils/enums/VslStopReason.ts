@@ -24,5 +24,8 @@ export enum VslStopReason {
     ENROLLED = 'enrolled',
     LATER_STAGE = 'later_stage',
 
+    // The admin confirmed that the manual call was completed.
+    MANUAL_CALL_DONE = 'manual_call_done',
+
     OTHER = 'other'
 }
