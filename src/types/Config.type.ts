@@ -33,3 +33,8 @@ export type InternalServiceConfig = {
     BASE_URL: string
     TIMEOUT_MS: number
 }
+
+export type ReminderConfig = {
+    FIRST_DELAY_MS: number
+    GAP_MS: number
+}
