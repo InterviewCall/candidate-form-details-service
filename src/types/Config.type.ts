@@ -54,3 +54,11 @@ export type ReminderConfig = {
     FIRST_DELAY_MS: number
     GAP_MS: number
 }
+
+export type CrmConfig = {
+    ENABLED: boolean
+    BASE_URL: string
+    INTAKE_KEY: string
+    TIMEOUT_MS: number
+    POLL_MS: number
+}

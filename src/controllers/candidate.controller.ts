@@ -9,6 +9,7 @@ import FormQuestionOptionRepository from '../repositories/FormQuestionOption.rep
 import QualificationFormRepository from '../repositories/QualificationForm.repository';
 import CandidateService from '../services/Candidate.service';
 import CandidateSubmissionService from '../services/CandidateSubmission.service';
+import crmSync from '../services/crmSync.instance';
 import { CreateCandidateResponse, CreateSubmissionResponse, GetCandidateResponse, GetCandidateSubmissionResponse } from '../types/Response.type';
 import { buildSuccessResponse } from '../utils/helpers/response.helper';
 
@@ -17,7 +18,8 @@ const candidateService = new CandidateService(
     new CandidateSubmissionRepository(),
     new CandidateAnswerRepository(),
     new QualificationFormRepository(),
-    new FormQuestionOptionRepository()
+    new FormQuestionOptionRepository(),
+    crmSync
 );
 
 const candidateSubmissionService = new CandidateSubmissionService(

@@ -67,6 +67,7 @@ export type GetCandidateSubmissionResponse = {
     submissionId: string,
     candidateId: number
     candidatePublicId: string
+    formSlug: string
     status: string
 }
 

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ReminderConfig, ServerConfig, WorkrIntegrationConfig } from '../types/Config.type';
+import { CrmConfig, DBConfig, FrontendConfig, InternalApiConfig, InternalServiceConfig, QueueConfig, RateLimitConfig, ReminderConfig, ServerConfig, WorkrIntegrationConfig } from '../types/Config.type';
 
 dotenv.config();
 
@@ -90,4 +90,17 @@ const HOUR_MS = 60 * MINUTE_MS;
 export const reminderConfig: ReminderConfig = {
     FIRST_DELAY_MS: 10 * MINUTE_MS,
     GAP_MS: 6 * HOUR_MS
+};
+
+// The CRM (InterviewCall lead management). Every funnel step is also sent there, so the sales team sees the person.
+// Off by default: nothing is queued and nothing is sent until CRM_SYNC_ENABLED=true and both the URL and key are set.
+export const crmConfig: CrmConfig = {
+    ENABLED: process.env.CRM_SYNC_ENABLED == 'true',
+    // e.g. https://crm.example.com/api/v1
+    BASE_URL: (process.env.CRM_BASE_URL || '').replace(/\/+$/, ''),
+    // Made in the CRM: Intake monitor > Source keys > system "VSL form details". Shown once there.
+    INTAKE_KEY: process.env.CRM_INTAKE_KEY || '',
+    TIMEOUT_MS: Number(process.env.CRM_TIMEOUT_MS) || 10 * 1000,
+    // How often the queue is checked for events that are due (a new event is sent straight away, this is for retries).
+    POLL_MS: Number(process.env.CRM_POLL_MS) || 15 * 1000
 };
