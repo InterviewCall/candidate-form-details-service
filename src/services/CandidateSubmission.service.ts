@@ -6,6 +6,8 @@ import CandidateSubmissionRepository from '../repositories/CandidateSubmission.r
 import { NotificationChannel } from '../utils/enums/NotificationChannel';
 import { NotFoundError } from '../utils/errors/app.error';
 import { getBookingLink } from '../utils/helpers/getBookingLink.helper';
+import { reminderConfig } from '../configs/server.config';
+
 
 class CandidateSubmissionService {
     constructor(private readonly candidateSubmissionRepository: CandidateSubmissionRepository) {}
@@ -18,12 +20,21 @@ class CandidateSubmissionService {
     }
 
     async sendReminderNotificationForPendingBookings() {
-        const cutoffTime = new Date(Date.now() - 10 * 60 * 1000);
+        const { FIRST_DELAY_MS, GAP_MS } = reminderConfig;
+        const now = Date.now();
+        const cutoffTime = new Date(now - FIRST_DELAY_MS);
         const pendingBookingSubmissions: CandidateSubmission[] = await this.candidateSubmissionRepository.findAllBookingPendingSubmisssions(cutoffTime);
 
         if(pendingBookingSubmissions.length > 0) {
             for(const submission of pendingBookingSubmissions) {
-                if(!submission.candidate) {
+                if(!submission.candidate || !submission.submittedAt) {
+                    continue;
+                }
+
+                // Reminder 1 is due FIRST_DELAY after submission, every next reminder GAP after the previous one
+                const reminderDueTime = submission.submittedAt.getTime() + FIRST_DELAY_MS + (submission.reminderCount * GAP_MS);
+
+                if(reminderDueTime > now) {
                     continue;
                 }
 

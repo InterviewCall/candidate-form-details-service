@@ -17,6 +17,8 @@ import { CandidateSubmissionStatus } from '../utils/enums/CandidateSubmissionSta
 import { LeadTemperature } from '../utils/enums/LeadTemperature';
 import { BadRequestError, InternalServerError, NotFoundError } from '../utils/errors/app.error';
 import { FORM_SCORING_QUESTION_KEYS } from '../utils/factories/scoringQuestionKeysFactory';
+import type CrmSyncService from './CrmSync.service';
+import { CRM_EVENT_DETAILS, CRM_EVENT_FORM } from './CrmSync.service';
 
 class CandidateService {
     private readonly candidateRepository: CandidateRepository;
@@ -24,19 +26,22 @@ class CandidateService {
     private readonly candidateAnswerRepository: CandidateAnswerRepository;
     private readonly qualificationFormRepository: QualificationFormRepository;
     private readonly formQuestionOptionRepository: FormQuestionOptionRepository;
+    private readonly crmSync: CrmSyncService;
 
     constructor(
         candidateRepository: CandidateRepository,
         candidateSubmissionRepository: CandidateSubmissionRepository,
         candidateAnswerRepository: CandidateAnswerRepository,
         qualificationFormRepository: QualificationFormRepository,
-        formQuestionOptionRepository: FormQuestionOptionRepository
+        formQuestionOptionRepository: FormQuestionOptionRepository,
+        crmSync: CrmSyncService
     ) {
         this.candidateRepository = candidateRepository;
         this.candidateSubmissionRepository = candidateSubmissionRepository;
         this.candidateAnswerRepository = candidateAnswerRepository;
         this.qualificationFormRepository = qualificationFormRepository;
         this.formQuestionOptionRepository = formQuestionOptionRepository;
+        this.crmSync = crmSync;
     }
 
     async createCandidate(payload: CreateCandidateDto): Promise<CreateCandidateResponse> {
@@ -75,7 +80,11 @@ class CandidateService {
                 utmTerm: payload.utmTerm ?? null,
             }, transaction);
 
+            // Tell the CRM this person gave their details (queued with the save, sent after it).
+            await this.crmSync.enqueue(CRM_EVENT_DETAILS, submission.publicId, transaction);
+
             await transaction.commit();
+            this.crmSync.kick();
 
             return {
                 candidateId: candidate.public_id,
@@ -155,7 +164,11 @@ class CandidateService {
                 transaction
             );
 
+            // Tell the CRM the form is filled, with the answers, score and temperature (queued with the save, sent after it).
+            await this.crmSync.enqueue(CRM_EVENT_FORM, submission.publicId, transaction);
+
             await transaction.commit();
+            this.crmSync.kick();
 
             return {
                 submissionId: submission.publicId
@@ -212,6 +225,7 @@ class CandidateService {
                 submissionId: candidateSubmission.publicId,
                 candidateId: candidateSubmission.candidateId,
                 candidatePublicId: candidateSubmission.candidate!.public_id,
+                formSlug: candidateSubmission.formSlug,
                 status: candidateSubmission.status,
             };
         } catch (error) {

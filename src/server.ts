@@ -10,6 +10,7 @@ import { attachCorrelationIdMiddleware } from './middlewares/correlation.middlew
 import { appErrorHandler, genericErrorHandler } from './middlewares/error.middleware';
 import { apiRateLimiter, writeRateLimiter } from './middlewares/rateLimit.middleware';
 import apiRouter from './routes';
+import crmSync from './services/crmSync.instance';
 
 const app = express();
 
@@ -36,4 +37,5 @@ app.listen(serverConfig.PORT, async () => {
     await sequelize.authenticate();
     logger.info('Database connection has been established successfully', {error: 'new error'});
     bookingReminderCron();
+    crmSync.start();
 });
